@@ -25,7 +25,17 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>BlackScholesModel.hpp</itemPath>
+    <itemPath>MonteCarlo.hpp</itemPath>
+    <itemPath>Option.hpp</itemPath>
+    <itemPath>mc_example.cpp</itemPath>
+    <itemPath>parser.cpp</itemPath>
+    <itemPath>parser.hpp</itemPath>
+    <itemPath>test_parser.cpp</itemPath>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>../../../Téléchargements/pricer-skel</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">
@@ -36,7 +46,21 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="BlackScholesModel.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MonteCarlo.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Option.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mc_example.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="parser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="parser.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test_parser.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -59,7 +83,21 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="BlackScholesModel.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MonteCarlo.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Option.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mc_example.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="parser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="parser.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test_parser.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
   </confs>
