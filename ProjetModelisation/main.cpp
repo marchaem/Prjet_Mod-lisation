@@ -13,7 +13,7 @@
  */
 int main(int argc, char** argv) {
 
-    std::cout << "coucou" << std::endl;
+    std::cout << "grgr" << std::endl;
     return 1145;
 }
 
