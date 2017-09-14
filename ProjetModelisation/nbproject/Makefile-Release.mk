@@ -35,10 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/mc_example.o \
-	${OBJECTDIR}/parser.o \
-	${OBJECTDIR}/test_parser.o
+	${OBJECTDIR}/_ext/472334951/mc_example.o \
+	${OBJECTDIR}/parser.o
 
 
 # C Compiler Flags
@@ -65,25 +63,15 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/projetmodelisation: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/projetmodelisation ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/main.o: main.cpp 
-	${MKDIR} -p ${OBJECTDIR}
+${OBJECTDIR}/_ext/472334951/mc_example.o: ../../../../../../../pieruccd/3A/PMP/Prjet_Mod-lisation/ProjetModelisation/mc_example.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/472334951
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
-
-${OBJECTDIR}/mc_example.o: mc_example.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/mc_example.o mc_example.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/472334951/mc_example.o ../../../../../../../pieruccd/3A/PMP/Prjet_Mod-lisation/ProjetModelisation/mc_example.cpp
 
 ${OBJECTDIR}/parser.o: parser.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/parser.o parser.cpp
-
-${OBJECTDIR}/test_parser.o: test_parser.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/test_parser.o test_parser.cpp
 
 # Subprojects
 .build-subprojects:
