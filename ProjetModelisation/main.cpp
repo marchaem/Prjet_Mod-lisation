@@ -14,6 +14,6 @@
 int main(int argc, char** argv) {
 
     std::cout << "coucou" << std::endl;
-    return 0;
+    return 1145;
 }
 
