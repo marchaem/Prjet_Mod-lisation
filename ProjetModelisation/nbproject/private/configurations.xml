@@ -27,8 +27,9 @@
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" asian.sa</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" asian.dat</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" data/asian.dat</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" asian.dat</runcommand>
+        <runcommand>"${OUTPUT_PATH}" data/asian.dat</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>

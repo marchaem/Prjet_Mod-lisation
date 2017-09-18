@@ -35,7 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/472334951/mc_example.o \
+	${OBJECTDIR}/_ext/472334951/test_parser.o \
+	${OBJECTDIR}/BlackScholesModel.o \
 	${OBJECTDIR}/parser.o
 
 
@@ -63,10 +64,15 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/projetmodelisation: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/projetmodelisation ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/_ext/472334951/mc_example.o: ../../../../../../../pieruccd/3A/PMP/Prjet_Mod-lisation/ProjetModelisation/mc_example.cpp 
+${OBJECTDIR}/_ext/472334951/test_parser.o: ../../../../../../../pieruccd/3A/PMP/Prjet_Mod-lisation/ProjetModelisation/test_parser.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/472334951
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/472334951/mc_example.o ../../../../../../../pieruccd/3A/PMP/Prjet_Mod-lisation/ProjetModelisation/mc_example.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/472334951/test_parser.o ../../../../../../../pieruccd/3A/PMP/Prjet_Mod-lisation/ProjetModelisation/test_parser.cpp
+
+${OBJECTDIR}/BlackScholesModel.o: BlackScholesModel.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/BlackScholesModel.o BlackScholesModel.cpp
 
 ${OBJECTDIR}/parser.o: parser.cpp 
 	${MKDIR} -p ${OBJECTDIR}

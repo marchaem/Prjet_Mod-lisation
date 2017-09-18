@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "parser.hpp"
+#include "BlackScholesModel.hpp"
 
 using namespace std;
 
@@ -43,10 +44,17 @@ int main(int argc, char **argv)
     pnl_vect_print_asrow(sigma);
     cout << "Number of samples " << n_samples << endl;
 
-    pnl_vect_free(&spot);
+    /*pnl_vect_free(&spot);
     pnl_vect_free(&sigma);
     pnl_vect_free(&divid);
-    delete P;
+    delete P;*/
+    
+    BlackScholesModel *testModel = new BlackScholesModel(P);
+    int timestep;
+    P->extract("timestep number",timestep);
+    PnlRng *rng = pnl_rng_create(1);
+    PnlMat *path = pnl_mat_create_from_zero(testModel->size_,timestep);
+    testModel->asset(path,T,timestep,rng);
 
     exit(0);
 }

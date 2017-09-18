@@ -24,12 +24,13 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <itemPath>BlackScholesModel.cpp</itemPath>
     <itemPath>BlackScholesModel.hpp</itemPath>
     <itemPath>MonteCarlo.hpp</itemPath>
     <itemPath>Option.hpp</itemPath>
-    <itemPath>../../../../../../../pieruccd/3A/PMP/Prjet_Mod-lisation/ProjetModelisation/mc_example.cpp</itemPath>
     <itemPath>parser.cpp</itemPath>
     <itemPath>parser.hpp</itemPath>
+    <itemPath>../../../../../../../pieruccd/3A/PMP/Prjet_Mod-lisation/ProjetModelisation/test_parser.cpp</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>../../../Téléchargements/pricer-skel</Elem>
@@ -57,10 +58,12 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="../../../../../../../pieruccd/3A/PMP/Prjet_Mod-lisation/ProjetModelisation/mc_example.cpp"
+      <item path="../../../../../../../pieruccd/3A/PMP/Prjet_Mod-lisation/ProjetModelisation/test_parser.cpp"
             ex="false"
             tool="1"
             flavor2="0">
+      </item>
+      <item path="BlackScholesModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="BlackScholesModel.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -93,10 +96,12 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="../../../../../../../pieruccd/3A/PMP/Prjet_Mod-lisation/ProjetModelisation/mc_example.cpp"
+      <item path="../../../../../../../pieruccd/3A/PMP/Prjet_Mod-lisation/ProjetModelisation/test_parser.cpp"
             ex="false"
             tool="1"
             flavor2="0">
+      </item>
+      <item path="BlackScholesModel.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="BlackScholesModel.hpp" ex="false" tool="3" flavor2="0">
       </item>

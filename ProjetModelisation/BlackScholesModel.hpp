@@ -3,6 +3,7 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+#include "parser.hpp"
 
 /// \brief Modèle de Black Scholes
 class BlackScholesModel
@@ -13,6 +14,8 @@ public:
     double rho_; /// paramètre de corrélation
     PnlVect *sigma_; /// vecteur de volatilités
     PnlVect *spot_; /// valeurs initiales du sous-jacent
+    
+    BlackScholesModel(Param *param);
 
     /**
      * Génère une trajectoire du modèle et la stocke dans path
