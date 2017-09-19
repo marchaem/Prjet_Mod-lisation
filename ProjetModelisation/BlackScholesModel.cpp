@@ -17,8 +17,8 @@ BlackScholesModel::BlackScholesModel(Param *param) {
 
 void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* rng) {
     
-    PnlVect* browniens = pnl_vect_create(this->size_);
-    pnl_vect_rng_normal(browniens,this->size_,rng);
+    PnlVect* browniens = pnl_vect_create(nbTimeSteps+1);
+    pnl_vect_rng_normal(browniens,nbTimeSteps+1,rng);
     PnlMat* cov = pnl_mat_create_from_zero(this->size_,this->size_);
     for (int i=0; i<this->size_; i++) {
         for (int j=0; j<this->size_; j++) {
@@ -33,7 +33,7 @@ void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* r
     
     pnl_mat_chol(cov);
     
-    double t = 0.0;
+    double pas =T/nbTimeSteps;  //à vérifier
     int i = 0;
     double S0;
     double St;
@@ -43,15 +43,21 @@ void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* r
         i = 0;
         S0 = pnl_vect_get(this->spot_,d);
         Sigmad = pnl_vect_get(this->sigma_,d);
+        pnl_mat_get_row(Ld,cov,d);
         while (i<=nbTimeSteps) {
-            t = i * T/nbTimeSteps;
-            pnl_mat_get_row(Ld,cov,d);
-            St = S0 * exp(this->r_- pow(Sigmad,2)/2 * t + Sigmad * pnl_vect_scalar_prod(browniens,Ld));
+        //    browniens=pnl_vect_get(browniens,i);          
+            St = S0 * exp(this->r_- pow(Sigmad,2)/2 * pas + Sigmad *sqrt(pas)*pnl_vect_scalar_prod(browniens,Ld));
+            S0=St;
             cout << S0 << " ";
             pnl_mat_set(path,d,i,St); // 0.0 a remplacer
+            i++;
+          //  pnl_vect_rng_normal()
         }
         cout << endl;
     }
+    pnl_vect_free(&Ld);
+    pnl_vect_free(&browniens);
+    pnl_mat_free(&cov);
     
     
     
