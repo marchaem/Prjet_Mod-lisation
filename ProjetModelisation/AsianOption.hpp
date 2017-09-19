@@ -16,6 +16,7 @@ public:
     AsianOption(double maturity, int nbtime, int size,double strike,std::vector <double> coefficient);
     AsianOption(const AsianOption& orig);
     virtual ~AsianOption();
+
     double getStrike();
     void setStrike(double strike);
     double payoff(const PnlMat *path);

@@ -40,12 +40,13 @@ void MonteCarlo::price(double &prix, double &ic){
     cout << "somme vaut" << somme<< endl;
     cout << "somme1 vaut" << somme1<< endl;
     cout << "somme2 vaut" << somme2<< endl;
-    cout << "somme3 vaut" << somme3<< endl;
+    
     pnl_mat_free(&mat);
     pnl_rng_free(&rng);
     somme1/=this->nbSamples_;
     somme2/=this->nbSamples_;
     somme3=pow(somme1,2);
+    cout << "somme3 vaut" << somme3<< endl;
     prix=somme1*exp(-this->mod_->r_*this->opt_->getMaturity());
     var=exp(-this->mod_->r_*this->opt_->getMaturity())*sqrt(somme2-somme3);
     ic=3.92*var/sqrt(this->nbSamples_);

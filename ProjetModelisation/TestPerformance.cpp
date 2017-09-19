@@ -19,7 +19,8 @@ void test1() {
     
     perform->toString();
     
-    
+    float f = perform->getCoefficient(1);
+    std::cout<< "coeff " << f<<endl;
     
     
     

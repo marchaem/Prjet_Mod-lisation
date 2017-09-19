@@ -39,17 +39,20 @@ void BasketOption::setStrike(double strike) {
 }
 
 double BasketOption::payoff(const PnlMat *path){
-    
-    
+
+    PnlMat * transp = pnl_mat_transpose(path);
     PnlVect * V = pnl_vect_create(this->getsize());
-    pnl_mat_get_col(V,path,this->getnbTimeSteps()-1);
+    pnl_mat_get_col(V,transp,this->getnbTimeSteps()-1);
     double payoff = 0.0;
     for (int i = 0 ; i< this->getsize() ; i++)
         payoff+=this->getCoefficient(i)*GET(V,i);
     payoff-=this->getStrike();
+    pnl_vect_free(&V);
+    pnl_mat_free(&transp);
     if ( payoff> 0)
         return payoff;
     return 0.0;
+    
 }
 void BasketOption::toString(){
     

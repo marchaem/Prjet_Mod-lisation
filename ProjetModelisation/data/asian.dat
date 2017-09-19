@@ -15,5 +15,5 @@ option type         <string>  asian
 payoff coefficients <vector>  0.5
 
 timestep number     <int>     5
-sample number       <long>    50
+sample number       <long>    1000
 

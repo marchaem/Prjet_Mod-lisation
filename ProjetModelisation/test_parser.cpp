@@ -50,9 +50,10 @@ int main(int argc, char **argv)
     int timestep;
     P->extract("timestep number",timestep);
     PnlRng *rng = pnl_rng_create(0);
-    vector<double> vect (size,1/size);
+    vector<double> vect (size,1.0/size);
     cout << size << " " <<n_samples <<endl;
     AsianOption *manu =new AsianOption(T,n_samples,size,strike,vect);
+    manu->toString();
     cout << "les coef valent" << manu->getCoefficient(1)<<endl;
     MonteCarlo *mt =new MonteCarlo(testModel,manu,timestep,n_samples);
     double prix=0.0;

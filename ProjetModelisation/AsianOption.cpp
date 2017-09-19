@@ -41,11 +41,9 @@ double AsianOption::payoff(const PnlMat *path){
     pnl_mat_free(&transp);
     if (payoff > this->Strike_)
         return (payoff-this->Strike_);
-    return 0.0;
-                
-    
-    
+    return 0.0;  
 }
+
 void AsianOption::toString(){
     
     std::cout << "Il s'agit d'une option asiatique de maturité : " << this->getMaturity()<< endl;
