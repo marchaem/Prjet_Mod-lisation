@@ -40,6 +40,7 @@ void BasketOption::setStrike(double strike) {
 
 double BasketOption::payoff(const PnlMat *path){
     
+    
     PnlVect * V = pnl_vect_create(this->getsize());
     pnl_mat_get_col(V,path,this->getnbTimeSteps()-1);
     double payoff = 0.0;

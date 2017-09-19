@@ -3,6 +3,7 @@
 #include "Option.hpp"
 #include "BlackScholesModel.hpp"
 #include "pnl/pnl_random.h"
+#include "Option.hpp"
 
 class MonteCarlo
 {
@@ -13,6 +14,8 @@ public:
     double fdStep_; /*! pas de différence finie */
     int nbSamples_; /*! nombre de tirages Monte Carlo */
 
+    MonteCarlo();
+    MonteCarlo(BlackScholesModel * black, Option * opt, double fdStep, int nbSamples);
     /**
      * Calcule le prix de l'option à la date 0
      *

@@ -16,12 +16,12 @@ BlackScholesModel::BlackScholesModel(Param *param) {
 
 void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* rng) {
     
-    std::cout << "DEBUT ASSET" << std::endl;
+    
     
     PnlMat* cov = pnl_mat_create_from_zero(this->size_,this->size_);
     for (int i=0; i<this->size_; i++) {
         for (int j=0; j<this->size_; j++) {
-            std::cout << "init matrice cov " << i << "," << j << std::endl;
+           
             if (i==j) {
                 pnl_mat_set(cov,i,j,1);
             }
@@ -41,7 +41,7 @@ void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* r
     double Sigmad;
     PnlVect* Ld = pnl_vect_create(this->size_);
     for (int d=0; d<this->size_; d++) { 
-        std::cout << "Dans le sousjacent " << d << std::endl;
+        
         /*On met S0 en première valeur*/
         S0 = pnl_vect_get(this->spot_,d);
         pnl_mat_set(path,d,0,S0);
@@ -49,13 +49,13 @@ void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* r
         Sigmad = pnl_vect_get(this->sigma_,d);
         pnl_mat_get_row(Ld,cov,d);
         while (i<=nbTimeSteps) {
-            std::cout << "Pas de temps = " << i << std::endl;
+            
             pnl_vect_rng_normal(Gi,this->size_,rng);
-            std::cout << "Calcul de st ..." << std::endl;
+            
             St = S0 * exp((this->r_- pow(Sigmad,2)/2) * pas + Sigmad *sqrt(pas)*pnl_vect_scalar_prod(Ld,Gi));
-            std::cout << "Calcul effectué !" << std::endl;
+           
             S0=St;
-            cout << S0 << " ";
+           
             pnl_mat_set(path,d,i,St); 
             i++;
         }

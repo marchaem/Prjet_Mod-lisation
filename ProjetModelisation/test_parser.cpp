@@ -2,6 +2,8 @@
 #include <string>
 #include "parser.hpp"
 #include "BlackScholesModel.hpp"
+#include "MonteCarlo.hpp"
+#include "AsianOption.hpp"
 
 using namespace std;
 
@@ -48,8 +50,14 @@ int main(int argc, char **argv)
     int timestep;
     P->extract("timestep number",timestep);
     PnlRng *rng = pnl_rng_create(0);
-    PnlMat *path = pnl_mat_create_from_zero(testModel->size_,timestep+1);
-    testModel->asset(path,T,timestep,rng);
+    vector<double> vect (size,1/size);
+    cout << size << " " <<n_samples <<endl;
+    AsianOption *manu =new AsianOption(T,n_samples,size,strike,vect);
+    cout << "les coef valent" << manu->getCoefficient(1)<<endl;
+    MonteCarlo *mt =new MonteCarlo(testModel,manu,timestep,n_samples);
+    double prix=0.0;
+    double ic=0.0;
+    mt->price(prix,ic);
     
     pnl_vect_free(&spot);
     pnl_vect_free(&sigma);
