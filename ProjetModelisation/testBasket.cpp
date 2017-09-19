@@ -45,6 +45,7 @@ void test1() {
     pnl_mat_print(test);
     std::cout<< "payoff est " << payoff<<endl;
     
+    
 }
 
 void test2() {
