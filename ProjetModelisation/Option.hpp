@@ -2,14 +2,15 @@
 
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+#include <iostream>
+#include <vector>
+using namespace std;
 
 /// \brief Classe Option abstraite
 class Option
 {
 public:
-    double T_; /// maturité
-    int nbTimeSteps_; /// nombre de pas de temps de discrétisation
-    int size_; /// dimension du modèle, redondant avec BlackScholesModel::size_
+    
     /**
      * Calcule la valeur du payoff sur la trajectoire
      *
@@ -19,6 +20,32 @@ public:
      * @return phi(trajectoire)
      */
     virtual double payoff(const PnlMat *path) = 0;
+    Option(); // constructeur sans param
+    Option(double T, int nbTImeSteps, int size);
+    Option(double T, int nbTImeSteps, int size,std::vector <double> coefficient); // constructeur  
+    Option(Option const& autre); // constructeur par copie
+    ~Option();
+    double getMaturity();
+    void setnbTimeSteps(int n);
+    void setMaturity(float T);
+    int getnbTimeSteps();
+    void setMaturity(double d);
+    int getsize();
+    void setsize(int size);
+    double getCoefficient(int i);
+    void setCoefficient(double d, int i);
+    
+    
+    
+    
+    
+    
+    
+protected: 
+    double Maturity_; /// maturité
+    int nbTimeSteps_; /// nombre de pas de temps de discrétisation
+    int size_; /// dimension du modèle, redondant avec BlackScholesModel::size_
+    std::vector <double> coefficient_; // vecteur de coefficients
 };
 
 
