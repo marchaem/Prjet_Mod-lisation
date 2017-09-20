@@ -8,10 +8,12 @@
 #ifndef ASIANOPTION_HPP
 #define	ASIANOPTION_HPP
 #include "Option.hpp"
+#include "parser.hpp"
 
 class AsianOption : public Option {
 public:
     AsianOption();
+    AsianOption(Param *P);
     AsianOption(double maturity, int nbtime, int size,double strike);
     AsianOption(double maturity, int nbtime, int size,double strike,std::vector <double> coefficient);
     AsianOption(const AsianOption& orig);

@@ -4,7 +4,7 @@
 
 model type          <string>  bs
 option size         <int>     2
-strike              <float>   2
+strike              <float>   100
 spot                <vector>  100
 maturity            <float>   1.5
 volatility          <vector>  0.2
@@ -14,6 +14,11 @@ correlation         <float>   0.0
 option type         <string>  asian
 payoff coefficients <vector>  0.5
 
+<<<<<<< HEAD
 timestep number     <int>     5
 sample number       <long>    50000
+=======
+timestep number     <int>     150
+sample number       <long>    1000000
+>>>>>>> c2c15423089db7c8458f4a7aa3256fd94f7ba8db
 
