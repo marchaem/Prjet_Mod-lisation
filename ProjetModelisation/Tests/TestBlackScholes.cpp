@@ -12,6 +12,7 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
+#include <time.h>
 
 using namespace std;
 
@@ -48,6 +49,7 @@ int main(int argc, char** argv) {
     BlackScholesModel *testModel = new BlackScholesModel(P);
     
     PnlRng * rng = pnl_rng_create(0);
+    pnl_rng_sseed(rng,time(NULL));
     PnlMat * path = pnl_mat_create(size,timestep+1);
     testModel->asset(path,T,timestep,rng);
     

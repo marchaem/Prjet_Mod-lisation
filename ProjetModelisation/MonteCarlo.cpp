@@ -16,31 +16,33 @@ MonteCarlo::MonteCarlo(BlackScholesModel* black, Option* opt, double fdStep, int
 }
 
 
-void MonteCarlo::price(double &prix, double &ic){
-    double somme=0.0;
-    double somme1 = 0.0;
-    double somme2=0.0;
-    double somme3=0.0;
+void MonteCarlo::price(double &prix, double &ic) {
+    
+    double payoffCour = 0.0;
+    double PrixCumul = 0.0;
+    double sommeCarres = 0.0;
+    double somme3 = 0.0;
     double var = 0.0;
-    PnlRng * rng = pnl_rng_create(0);
-    PnlMat * mat = pnl_mat_create(this->mod_->size_,this->opt_->getnbTimeSteps()+1);
+    
+    PnlRng *rng = pnl_rng_create(0);
+    pnl_rng_sseed(rng,time(NULL));
+    PnlMat *mat = pnl_mat_create(this->mod_->size_,this->opt_->getnbTimeSteps()+1);
+    
     for(int j=0; j < this->nbSamples_; j++){   
-        cout<<"on est à "<< j << endl;
         this->mod_->asset(mat,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),rng);
-        somme=this->opt_->payoff(mat);
-        somme1+=somme;
-        somme2+=pow(somme,2);       
+        payoffCour=this->opt_->payoff(mat);
+        PrixCumul+=payoffCour;
+        sommeCarres+=pow(payoffCour,2);       
     }
+    
+    prix = PrixCumul/this->nbSamples_ * exp(-this->mod_->r_*this->opt_->getMaturity());
+    double EmCarre;
+    EmCarre = ( sommeCarres/this->nbSamples_ - pow((PrixCumul/this->nbSamples_),2) ) * exp(-2*this->mod_->r_*this->opt_->getMaturity());
+    
+    ic = 1.96*2 * sqrt(EmCarre) / sqrt(this->nbSamples_);
     
     pnl_mat_free(&mat);
     pnl_rng_free(&rng);
-    somme1/=this->nbSamples_;
-    somme2/=this->nbSamples_;
-    somme3=pow(somme1,2);
-    prix=somme1*exp(-this->mod_->r_*this->opt_->getMaturity());
-    var=exp(-this->mod_->r_*this->opt_->getMaturity())*sqrt(somme2-somme3);
-    ic=3.92*var/sqrt(this->nbSamples_);
-    cout << " l'option vaut " << prix << " et a pour largeur d'intervalle de confiance " << ic <<endl; 
     
 }
 

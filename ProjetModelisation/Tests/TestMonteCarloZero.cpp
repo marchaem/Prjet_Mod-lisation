@@ -51,12 +51,10 @@ int main(int argc, char** argv) {
     BlackScholesModel *testModel = new BlackScholesModel(P);
     
     PnlRng * rng = pnl_rng_create(0);
-    PnlMat * path = pnl_mat_create(size,timestep+1);
-    //testModel->asset(path,T,timestep,rng);
+    PnlMat * path = pnl_mat_create(size,timestep);
     
     AsianOption *asianOption = new AsianOption(P);
     asianOption->setCoefficient(0.5,1);
-    asianOption->toString();
     
     double prix;
     double ic;
@@ -64,6 +62,8 @@ int main(int argc, char** argv) {
     MonteCarlo *mc = new MonteCarlo(testModel, asianOption, timestep , n_samples); // A changer peut -être 
     mc->price(prix,ic);
 
+    std::cout << "Prix de l'option = " << prix << " ic = " << ic << std::endl;
+    
     return 0;
 }
 
