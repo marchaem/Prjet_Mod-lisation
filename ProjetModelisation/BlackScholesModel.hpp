@@ -20,7 +20,11 @@ public:
     /**
      * Génère une trajectoire du modèle et la stocke dans path
      *
-     * @param[out] path contient une trajectoire du modèle.
+     * @param[ou
+    double dist = 0;
+    while (dist < t) {
+        dist += pasDeTps;
+        indiceCour++;t] path contient une trajectoire du modèle.
      * C'est une matrice de taille (nbTimeSteps+1) x d
      * @param[in] T  maturité
      * @param[in] nbTimeSteps nombre de dates de constatation
@@ -55,6 +59,8 @@ public:
      * @param[in] timestep pas de constatation du sous-jacent
      */
     void shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep);
+    
+    int getPasTemps(double t, double timestep,int nbtimestep);
 
 };
 

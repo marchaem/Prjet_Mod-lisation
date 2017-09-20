@@ -4,6 +4,7 @@
 #include "BlackScholesModel.hpp"
 #include "MonteCarlo.hpp"
 #include "AsianOption.hpp"
+#include "BasketOption.hpp"
 
 using namespace std;
 
@@ -45,17 +46,25 @@ int main(int argc, char **argv)
     cout << "volatility ";
     pnl_vect_print_asrow(sigma);
     cout << "Number of samples " << n_samples << endl;
-    
-    BlackScholesModel *testModel = new BlackScholesModel(P);
     int timestep;
     P->extract("timestep number",timestep);
-    PnlRng *rng = pnl_rng_create(0);
+    
+    
+    BlackScholesModel *testModel = new BlackScholesModel(P);
+    
     vector<double> vect (size,1.0/size);
-    AsianOption *manu =new AsianOption(T,n_samples,size,strike,vect);
-    MonteCarlo *mt =new MonteCarlo(testModel,manu,timestep,n_samples);
-    double prix=0.0;
-    double ic=0.0;
-    mt->price(prix,ic);
+    BasketOption *manu =new BasketOption(T,n_samples,size,strike,vect);
+    MonteCarlo *mt =new MonteCarlo(testModel,manu,0.00001,n_samples);
+    PnlVect * delta=pnl_vect_create(size);
+    PnlMat * mat=pnl_mat_create(size,1);
+    pnl_mat_set_col(mat,testModel->spot_,1);
+    pnl_mat_print(mat);
+    cout << "go delta"<<endl;
+    mt->delta(mat,0.0,delta);
+    cout <<"delta fini"<<endl;
+    //pnl_vect_print(delta);
+    cout <<"fini"<<endl;
+    
     
     pnl_vect_free(&spot);
     pnl_vect_free(&sigma);
