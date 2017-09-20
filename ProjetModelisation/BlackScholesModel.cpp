@@ -105,6 +105,9 @@ void BlackScholesModel::asset(PnlMat* path, double t, double T, int nbTimeSteps,
 }
 
 void BlackScholesModel::shiftAsset(PnlMat* shift_path, const PnlMat* path, int d, double h, double t, double timestep) {
+    
+    PnlVect * gd = pnl_vect_create(this->size_);
+    
 }
 
 
