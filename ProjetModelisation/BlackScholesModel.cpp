@@ -61,7 +61,7 @@ void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* r
         }
         cout << endl;
     }
-    
+    pnl_vect_free(&Gi);
     pnl_vect_free(&Ld);
     pnl_mat_free(&cov);
     

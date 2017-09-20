@@ -30,8 +30,7 @@ double AsianOption::payoff(const PnlMat *path){
     double tmp=0.0;
     for (int d =0; d<this->getsize();d++){
         tmp=0.0;
-        for (int i =0; i<this->getnbTimeSteps()+1;i++){
-            
+        for (int i =0; i<this->getnbTimeSteps()+1;i++){          
             tmp+=MGET(transp,i,d);
         }
         cout <<"coef vaut "<<this->getCoefficient(d)<<endl;
