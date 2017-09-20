@@ -24,7 +24,6 @@ AsianOption::AsianOption(const AsianOption& orig): Option(orig), Strike_(orig.St
 AsianOption::~AsianOption() {
 }
 double AsianOption::payoff(const PnlMat *path){
-    cout <<"asian " <<endl;
     PnlMat * transp = pnl_mat_transpose(path);
     double payoff =0.0;
     double tmp=0.0;
@@ -33,10 +32,8 @@ double AsianOption::payoff(const PnlMat *path){
         for (int i =0; i<this->getnbTimeSteps()+1;i++){          
             tmp+=MGET(transp,i,d);
         }
-        cout <<"coef vaut "<<this->getCoefficient(d)<<endl;
         payoff+=this->getCoefficient(d)*tmp/(getnbTimeSteps()+1);   
     }
-    cout <<"vrai payoff vaut "<<payoff<<endl;
     pnl_mat_free(&transp);
     if (payoff > this->Strike_)
         return (payoff-this->Strike_);

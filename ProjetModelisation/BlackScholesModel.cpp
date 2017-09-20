@@ -59,7 +59,6 @@ void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* r
             pnl_mat_set(path,d,i,St); 
             i++;
         }
-        cout << endl;
     }
     pnl_vect_free(&Gi);
     pnl_vect_free(&Ld);
@@ -71,9 +70,8 @@ void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* r
 
 void BlackScholesModel::asset(PnlMat* path, double t, double T, int nbTimeSteps, PnlRng* rng, const PnlMat* past) {
     
-    path = pnl_mat_create_from_zero(nbTimeSteps+1,this->size_);
-    PnlVect* browniens = pnl_vect_create(this->size_);
-    pnl_vect_rng_normal(browniens,this->size_,rng);
+    
+    
     PnlMat* cov = pnl_mat_create_from_zero(this->size_,this->size_);
     for (int i=0; i<this->size_; i++) {
         for (int j=0; j<this->size_; j++) {
