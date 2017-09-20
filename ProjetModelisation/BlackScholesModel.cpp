@@ -103,14 +103,24 @@ void BlackScholesModel::asset(PnlMat* path, double t, double T, int nbTimeSteps,
 
 void BlackScholesModel::shiftAsset(PnlMat* shift_path, const PnlMat* path, int d, double h, double t, double timestep) {
     
-    PnlVect * gd = pnl_vect_create(this->size_);
+    int indicet = this->getPasTemps(t,timestep,path->n);
+    pnl_mat_clone(shift_path,path);
+    double wesh;
+    for (int j= indicet+1;j<path->n;j++){
+        wesh=MGET(path,d,j);
+        pnl_mat_set(shift_path,d,j,wesh*(1+h));
+    }
+    
+   
     
 }
 
-int BlackScholesModel::getPasTemps(double t, double T, int nbTimeSteps) {
-    double pasDeTps = T/nbTimeSteps;
+int BlackScholesModel::getPasTemps(double t, double timestep,int nbTimeStep) {
+    double pasDeTps = timestep;
     int indiceCour = 0;
     double dist = 0;
+    if(t==0)
+        return 0;
     while (dist <= t) {
         dist += pasDeTps;
         indiceCour++;
