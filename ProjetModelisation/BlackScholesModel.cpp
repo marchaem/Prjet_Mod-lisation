@@ -15,90 +15,62 @@ BlackScholesModel::BlackScholesModel(Param *param) {
 
 
 void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* rng) {
-    
-    
-    
-    PnlMat* cov = pnl_mat_create_from_zero(this->size_,this->size_);
-    for (int i=0; i<this->size_; i++) {
-        for (int j=0; j<this->size_; j++) {
-           
-            if (i==j) {
-                pnl_mat_set(cov,i,j,1);
-            }
-            else {
-                pnl_mat_set(cov,i,j,this->rho_);
-            }
-        } 
-    }
-    
+     
+    PnlMat* cov = pnl_mat_create_from_scalar(this->size_,this->size_,this->rho_);
+    pnl_mat_set_diag(cov,1,this->size_);
     pnl_mat_chol(cov);
     
-    double pas =T/nbTimeSteps;  //    testModel->à vérifier
+    double pas =T/nbTimeSteps;     int i = 0;
     PnlVect* Gi = pnl_vect_create(this->size_);
-    int i = 0;
     double S0;
     double St;
-    double Sigmad;
+    double sigmad;
     PnlVect* Ld = pnl_vect_create(this->size_);
     for (int d=0; d<this->size_; d++) { 
-        
-        /*On met S0 en première valeur*/
         S0 = pnl_vect_get(this->spot_,d);
         pnl_mat_set(path,d,0,S0);
-        i = 1;
-        Sigmad = pnl_vect_get(this->sigma_,d);
+        sigmad = pnl_vect_get(this->sigma_,d);
         pnl_mat_get_row(Ld,cov,d);
-        while (i<=nbTimeSteps) {
-            
-            pnl_vect_rng_normal(Gi,this->size_,rng);
-            
-            St = S0 * exp((this->r_- pow(Sigmad,2)/2) * pas + Sigmad *sqrt(pas)*pnl_vect_scalar_prod(Ld,Gi));
-           
-            S0=St;
-           
+        for (int i=1; i<=nbTimeSteps; i++) {           
+            pnl_vect_rng_normal(Gi,this->size_,rng);            
+            St = S0 * exp((this->r_- pow(sigmad,2)/2) * pas + sigmad *sqrt(pas)*pnl_vect_scalar_prod(Ld,Gi));           
+            S0=St;          
             pnl_mat_set(path,d,i,St); 
-            i++;
         }
-    }
-    
+    }  
     pnl_vect_free(&Ld);
     pnl_mat_free(&cov);
-    
-    
+    pnl_vect_free(&Gi);
     
 }
 
 void BlackScholesModel::asset(PnlMat* path, double t, double T, int nbTimeSteps, PnlRng* rng, const PnlMat* past) {
     
-    PnlMat* cov = pnl_mat_create_from_zero(this->size_,this->size_);
-    for (int i=0; i<this->size_; i++) {
-        for (int j=0; j<this->size_; j++) {
-            if (i==j) {
-                pnl_mat_set(cov,i,j,1);
-            }
-            else {
-                pnl_mat_set(cov,i,j,this->rho_);
-            }
-        } 
-    }
-    
-    std::cout << "Nombre de dates dans past " << past->n << std::endl;
-    std::cout << "Nombre de dates dans la grille dans past" << this->getPasTemps(t,T,nbTimeSteps) << std::endl;
-    
+    PnlMat* cov = pnl_mat_create_from_scalar(this->size_,this->size_,this->rho_);
+    pnl_mat_set_diag(cov,1,this->size_);
     pnl_mat_chol(cov);
     
+    pnl_mat_chol(cov);
+    double S;
+    double Sigmad;
+    double pas = 0;
+    PnlVect* Gi = pnl_vect_create(this->size_);
+    PnlVect* Ld = pnl_vect_create(this->size_);
+    
     for (int d=0; d<this->size_; d++) {
-        double St = pnl_mat_get(past,d,past->n-1);
+        double St = pnl_mat_get(past,d,(past->n)-1);
+        Sigmad = pnl_vect_get(this->sigma_,d);
+        pnl_mat_get_row(Ld,cov,d);
         for (int j=0; j<nbTimeSteps; j++) {
-            if (j<past->n-1) {
-                //pnl_mat_set(path,d,i,pnl_mat_get(past,d,j)); 
+            pnl_vect_rng_normal(Gi,this->size_,rng);
+            pas = j*T/nbTimeSteps - t;
+            if (j<(past->n)-1) {
+                pnl_mat_set(path,d,j,pnl_mat_get(past,d,j)); 
             } else {
-                
+                S = St * exp( (this->r_- pow(Sigmad,2)/2) * pas + Sigmad *sqrt(pas)*pnl_vect_scalar_prod(Ld,Gi));
             }
         }
-    }
-    
-    
+    }  
 }
 
 void BlackScholesModel::shiftAsset(PnlMat* shift_path, const PnlMat* path, int d, double h, double t, double timestep) {
