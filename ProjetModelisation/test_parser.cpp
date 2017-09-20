@@ -49,13 +49,14 @@ int main(int argc, char **argv)
     P->extract("timestep number",timestep);
     
     BlackScholesModel *testModel = new BlackScholesModel(P);
-    PnlRng *rng = pnl_rng_create(0);
+    
     vector<double> vect (size,1.0/size);
     AsianOption *manu =new AsianOption(T,n_samples,size,strike,vect);
     MonteCarlo *mt =new MonteCarlo(testModel,manu,timestep,n_samples);
     double prix=0.0;
     double ic=0.0;
     mt->price(prix,ic);
+    
     
     pnl_vect_free(&spot);
     pnl_vect_free(&sigma);
