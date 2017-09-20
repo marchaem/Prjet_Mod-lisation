@@ -45,16 +45,13 @@ int main(int argc, char **argv)
     cout << "volatility ";
     pnl_vect_print_asrow(sigma);
     cout << "Number of samples " << n_samples << endl;
-    
-    BlackScholesModel *testModel = new BlackScholesModel(P);
     int timestep;
     P->extract("timestep number",timestep);
+    
+    BlackScholesModel *testModel = new BlackScholesModel(P);
     PnlRng *rng = pnl_rng_create(0);
     vector<double> vect (size,1.0/size);
-    cout << size << " " <<n_samples <<endl;
     AsianOption *manu =new AsianOption(T,n_samples,size,strike,vect);
-    manu->toString();
-    cout << "les coef valent" << manu->getCoefficient(1)<<endl;
     MonteCarlo *mt =new MonteCarlo(testModel,manu,timestep,n_samples);
     double prix=0.0;
     double ic=0.0;
