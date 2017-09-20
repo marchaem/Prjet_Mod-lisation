@@ -33,7 +33,7 @@ void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* r
     
     pnl_mat_chol(cov);
     
-    double pas =T/nbTimeSteps;  //à vérifier
+    double pas =T/nbTimeSteps;  //    testModel->à vérifier
     PnlVect* Gi = pnl_vect_create(this->size_);
     int i = 0;
     double S0;
@@ -59,7 +59,6 @@ void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* r
             pnl_mat_set(path,d,i,St); 
             i++;
         }
-        cout << endl;
     }
     
     pnl_vect_free(&Ld);
@@ -71,9 +70,6 @@ void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* r
 
 void BlackScholesModel::asset(PnlMat* path, double t, double T, int nbTimeSteps, PnlRng* rng, const PnlMat* past) {
     
-    path = pnl_mat_create_from_zero(nbTimeSteps+1,this->size_);
-    PnlVect* browniens = pnl_vect_create(this->size_);
-    pnl_vect_rng_normal(browniens,this->size_,rng);
     PnlMat* cov = pnl_mat_create_from_zero(this->size_,this->size_);
     for (int i=0; i<this->size_; i++) {
         for (int j=0; j<this->size_; j++) {
@@ -86,19 +82,20 @@ void BlackScholesModel::asset(PnlMat* path, double t, double T, int nbTimeSteps,
         } 
     }
     
-    /*Il faudrait pouvoir renvoyer une exception en cas d'erreur*/
+    std::cout << "Nombre de dates dans past " << past->n << std::endl;
+    std::cout << "Nombre de dates dans la grille dans past" << this->getPasTemps(t,T,nbTimeSteps) << std::endl;
+    
     pnl_mat_chol(cov);
     
-    double pasDeTps = T/nbTimeSteps;
-    double dateCour = 0;
-    int m = 0;
-    while (t<dateCour) {
-        t += dateCour + pasDeTps;
-        m++;
-    }
-    
     for (int d=0; d<this->size_; d++) {
-        
+        double St = pnl_mat_get(past,d,past->n-1);
+        for (int j=0; j<nbTimeSteps; j++) {
+            if (j<past->n-1) {
+                //pnl_mat_set(path,d,i,pnl_mat_get(past,d,j)); 
+            } else {
+                
+            }
+        }
     }
     
     
@@ -108,6 +105,17 @@ void BlackScholesModel::shiftAsset(PnlMat* shift_path, const PnlMat* path, int d
     
     PnlVect * gd = pnl_vect_create(this->size_);
     
+}
+
+int BlackScholesModel::getPasTemps(double t, double T, int nbTimeSteps) {
+    double pasDeTps = T/nbTimeSteps;
+    int indiceCour = 0;
+    double dist = 0;
+    while (dist <= t) {
+        dist += pasDeTps;
+        indiceCour++;
+    }
+    return indiceCour-1;
 }
 
 

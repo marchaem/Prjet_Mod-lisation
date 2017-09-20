@@ -17,7 +17,6 @@ MonteCarlo::MonteCarlo(BlackScholesModel* black, Option* opt, double fdStep, int
 
 
 void MonteCarlo::price(double &prix, double &ic){
-    cout << "on rentre dans price " << endl;
     double somme=0.0;
     double somme1 = 0.0;
     double somme2=0.0;
@@ -25,28 +24,18 @@ void MonteCarlo::price(double &prix, double &ic){
     double var = 0.0;
     PnlRng * rng = pnl_rng_create(0);
     PnlMat * mat = pnl_mat_create(this->mod_->size_,this->opt_->getnbTimeSteps()+1);
-    cout << "creation de mat" << endl;
     for(int j=0; j < this->nbSamples_; j++){      
-        cout << "avant asset"<< j <<"nb samples vaut"<<this->nbSamples_ << endl;
         this->mod_->asset(mat,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),rng);
-        cout <<"après asset"<<endl;
         somme=this->opt_->payoff(mat);
-        cout << "somme vaut " << somme<<endl;
         somme1+=somme;
-        cout << "ingtig"<<endl;
         somme2+=pow(somme,2);       
     }
-    cout << "les sommes sont finies"<<endl;
-    cout << "somme vaut" << somme<< endl;
-    cout << "somme1 vaut" << somme1<< endl;
-    cout << "somme2 vaut" << somme2<< endl;
     
     pnl_mat_free(&mat);
     pnl_rng_free(&rng);
     somme1/=this->nbSamples_;
     somme2/=this->nbSamples_;
     somme3=pow(somme1,2);
-    cout << "somme3 vaut" << somme3<< endl;
     prix=somme1*exp(-this->mod_->r_*this->opt_->getMaturity());
     var=exp(-this->mod_->r_*this->opt_->getMaturity())*sqrt(somme2-somme3);
     ic=3.92*var/sqrt(this->nbSamples_);
