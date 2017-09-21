@@ -51,18 +51,22 @@ int main(int argc, char **argv)
     
     
     BlackScholesModel *testModel = new BlackScholesModel(P);
-    
+    double prix,mc;
     vector<double> vect (size,1.0/size);
-    BasketOption *manu =new BasketOption(T,n_samples,size,strike,vect);
-    MonteCarlo *mt =new MonteCarlo(testModel,manu,0.00001,n_samples);
+    BasketOption *basket =new BasketOption(T,timestep,size,strike,spot);
+    AsianOption *asian=new AsianOption(P);
+    MonteCarlo *mt1 =new MonteCarlo(testModel,basket,0.00001,n_samples);
+
+    MonteCarlo *mt2 =new MonteCarlo(testModel,asian,0.00001,n_samples);
     PnlVect * delta=pnl_vect_create(size);
     PnlMat * mat=pnl_mat_create(size,1);
     pnl_mat_set_col(mat,testModel->spot_,1);
     pnl_mat_print(mat);
     cout << "go delta"<<endl;
-    mt->delta(mat,0.0,delta);
+    //mt->delta(mat,0.0,delta);
+    mt1->price(prix,mc);
     cout <<"delta fini"<<endl;
-    //pnl_vect_print(delta);
+    pnl_vect_print(delta);
     cout <<"fini"<<endl;
     
     

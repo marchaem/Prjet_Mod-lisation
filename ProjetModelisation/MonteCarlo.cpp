@@ -21,9 +21,7 @@ void MonteCarlo::price(double &prix, double &ic) {
     double payoffCour = 0.0;
     double PrixCumul = 0.0;
     double sommeCarres = 0.0;
-    double somme3 = 0.0;
-    double var = 0.0;
-
+    
     
     PnlRng *rng = pnl_rng_create(0);
     pnl_rng_sseed(rng,time(NULL));
@@ -42,7 +40,7 @@ void MonteCarlo::price(double &prix, double &ic) {
     EmCarre = ( sommeCarres/this->nbSamples_ - pow((PrixCumul/this->nbSamples_),2) ) * exp(-2*this->mod_->r_*this->opt_->getMaturity());
     
     ic = 1.96*2 * sqrt(EmCarre) / sqrt(this->nbSamples_);
-    
+    cout <<"le prix vaut "<<prix<<"et ic :"<<ic<<endl;
     pnl_mat_free(&mat);
     pnl_rng_free(&rng);
     

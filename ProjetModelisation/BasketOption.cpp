@@ -16,6 +16,7 @@ BasketOption::BasketOption() : Option(), Strike_(1){
     
 }
 
+
 BasketOption::BasketOption(double maturity, int nbtime, int size,double strike) : Option(maturity,nbtime,size), Strike_(strike){
     
 }
