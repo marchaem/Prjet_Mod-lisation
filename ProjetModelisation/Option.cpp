@@ -29,7 +29,10 @@ Option::Option(Param *P){
     P->extract("maturity", this->Maturity_);
     P->extract("option size", this->size_);
     P->extract("payoff coefficients", this->coefficient_, this->size_);
+    std::vector<double> second (size_,coefficient_[0]);
+    this->coefficient_=second;
     P->extract("timestep number", this->nbTimeSteps_);
+    
 }
 Option::~Option(){
     coefficient_.~vector();
