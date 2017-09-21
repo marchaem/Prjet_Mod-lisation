@@ -5,6 +5,7 @@
 #include "MonteCarlo.hpp"
 #include "AsianOption.hpp"
 #include "BasketOption.hpp"
+#include "PerformanceOption.hpp"
 
 using namespace std;
 
@@ -55,16 +56,19 @@ int main(int argc, char **argv)
     vector<double> vect (size,1.0/size);
     BasketOption *basket =new BasketOption(P);
     AsianOption *asian=new AsianOption(P);
+    PerformanceOption *perf=new PerformanceOption(P);
     MonteCarlo *mt1 =new MonteCarlo(testModel,basket,0.00001,n_samples);
 
     MonteCarlo *mt2 =new MonteCarlo(testModel,asian,0.00001,n_samples);
+    MonteCarlo *mt3 =new MonteCarlo(testModel,perf,0.00001,n_samples);
+
     PnlVect * delta=pnl_vect_create(size);
-    PnlMat * mat=pnl_mat_create(size,1);
-    pnl_mat_set_col(mat,testModel->spot_,1);
-    pnl_mat_print(mat);
+   // PnlMat * mat=pnl_mat_create(size,1);
+   // pnl_mat_set_col(mat,testModel->spot_,1);
+   // pnl_mat_print(mat);
     cout << "go delta"<<endl;
-    mt1->delta(mat,0.0,delta);
-    mt1->price(prix,mc);
+    //mt1->delta(mat,0.0,delta);
+    mt3->price(prix,mc);
     cout <<"delta fini"<<endl;
     pnl_vect_print(delta);
     cout <<"fini"<<endl;

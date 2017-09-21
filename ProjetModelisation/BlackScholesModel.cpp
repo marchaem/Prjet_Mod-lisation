@@ -25,14 +25,8 @@ void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* r
     double pas =T/nbTimeSteps;
     
     PnlMat* matGi = pnl_mat_create(this->size_,nbTimeSteps);
-    PnlVect *vectNorm = pnl_vect_create(this->size_);
-    for (int j=0; j<nbTimeSteps; j++) {
-        pnl_vect_rng_normal(vectNorm,this->size_,rng); 
-        pnl_mat_set_col(matGi,vectNorm,j);
-    }
+    pnl_mat_rng_normal(matGi, this->size_,nbTimeSteps, rng);
     PnlVect *Gi = pnl_vect_create(this->size_);
-    pnl_vect_free(&vectNorm);
-    
     double S0;
     double St;
     double sigmad;
@@ -49,17 +43,17 @@ void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* r
             pnl_mat_set(path,d,i,St); 
         }
     }  
-    
     pnl_vect_free(&Ld);
     pnl_mat_free(&cov);
     pnl_mat_free(&matGi);
     pnl_vect_free(&Gi);
     
+    
 }
 
 void BlackScholesModel::asset(PnlMat* path, double t, double T, int nbTimeSteps, PnlRng* rng, const PnlMat* past) {
     
-    /*PnlMat* cov = pnl_mat_create_from_scalar(this->size_,this->size_,this->rho_);
+    PnlMat* cov = pnl_mat_create_from_scalar(this->size_,this->size_,this->rho_);
     pnl_mat_set_diag(cov,1,this->size_);
     pnl_mat_chol(cov);
     
@@ -83,7 +77,7 @@ void BlackScholesModel::asset(PnlMat* path, double t, double T, int nbTimeSteps,
                 S = St * exp( (this->r_- pow(Sigmad,2)/2) * pas + Sigmad *sqrt(pas)*pnl_vect_scalar_prod(Ld,Gi));
             }
         }
-    }*/  
+    }  
 }
 
 void BlackScholesModel::shiftAsset(PnlMat* shift_path, const PnlMat* path, int d, double h, double t, double timestep) {

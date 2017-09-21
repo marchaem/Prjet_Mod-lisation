@@ -13,5 +13,5 @@ option type         <string>  performance
 payoff coefficients <vector>  0.2
 
 timestep number     <int>     12
-sample number       <long>    50000
+sample number       <long>    500
 
