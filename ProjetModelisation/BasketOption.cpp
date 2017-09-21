@@ -27,6 +27,11 @@ BasketOption::BasketOption(double maturity, int nbtime, int size,double strike,s
 
 BasketOption::BasketOption(const BasketOption& orig): Option(orig), Strike_(orig.Strike_){
 }
+BasketOption::BasketOption(Param* P): Option(P) {
+    
+    P->extract("strike", this->Strike_);
+ 
+}
 
 BasketOption::~BasketOption() {
 }
@@ -40,13 +45,16 @@ void BasketOption::setStrike(double strike) {
 }
 
 double BasketOption::payoff(const PnlMat *path){
-
+    
     PnlMat * transp = pnl_mat_transpose(path);
-    PnlVect * V = pnl_vect_create(this->getsize());
-    pnl_mat_get_col(V,transp,this->getnbTimeSteps()-1);
+    PnlVect * V = pnl_vect_create(this->getsize());   
+    pnl_mat_get_row(V,transp,this->getnbTimeSteps());
+    pnl_vect_print(V);  
     double payoff = 0.0;
-    for (int i = 0 ; i< this->getsize() ; i++)
+    for (int i = 0 ; i< this->getsize() ; i++){
+       
         payoff+=this->getCoefficient(i)*GET(V,i);
+    }
     payoff-=this->getStrike();
     pnl_vect_free(&V);
     pnl_mat_free(&transp);

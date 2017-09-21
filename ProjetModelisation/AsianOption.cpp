@@ -10,12 +10,10 @@ using namespace std;
 AsianOption::AsianOption(): Option(), Strike_(1) {
 }
 
-AsianOption::AsianOption(Param *P) {
-    P->extract("maturity", this->Maturity_);
+AsianOption::AsianOption(Param *P) : Option(P) {
+    
     P->extract("strike", this->Strike_);
-    P->extract("option size", this->size_);
-    P->extract("payoff coefficients", this->coefficient_, this->size_);
-    P->extract("timestep number", this->nbTimeSteps_);
+ 
 }
 
 AsianOption::AsianOption(double maturity, int nbtime, int size,double strike) : Option(maturity,nbtime,size), Strike_(strike){

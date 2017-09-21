@@ -25,7 +25,15 @@ Option::Option(double T, int nbTimeSteps, int size,std::vector <double> coeffici
 Option::Option(Option const& autre): Maturity_(autre.Maturity_), nbTimeSteps_(autre.nbTimeSteps_), size_(autre.size_),coefficient_(autre.coefficient_){
     
 }
+Option::Option(Param *P){
+    P->extract("maturity", this->Maturity_);
+    P->extract("option size", this->size_);
+    P->extract("payoff coefficients", this->coefficient_, this->size_);
+    std::vector<double> second (size_,coefficient_[0]);
+    this->coefficient_=second;
+    P->extract("timestep number", this->nbTimeSteps_);
     
+}
 Option::~Option(){
     coefficient_.~vector();
 }

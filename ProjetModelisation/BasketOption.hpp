@@ -9,12 +9,14 @@
 #define	BASKETOPTION_HPP
 #include "Option.hpp"
 
+
 class BasketOption : public Option {
 public:
     BasketOption();
     BasketOption(double maturity, int nbtime, int size,double strike);
     BasketOption(const BasketOption& orig);
     BasketOption(double maturity, int nbtime, int size,double strike,std::vector <double> coefficient);
+    BasketOption(Param * P);
     virtual ~BasketOption();
     
     double getStrike();

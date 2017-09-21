@@ -28,12 +28,11 @@ void MonteCarlo::price(double &prix, double &ic) {
     PnlMat *mat = pnl_mat_create(this->mod_->size_,this->opt_->getnbTimeSteps()+1);
     
     for(int j=0; j < this->nbSamples_; j++){   
-        this->mod_->asset(mat,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),rng);
+        this->mod_->asset(mat,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),rng);                    
         payoffCour=this->opt_->payoff(mat);
         PrixCumul+=payoffCour;
         sommeCarres+=pow(payoffCour,2);       
     }
-
     
     prix = PrixCumul/this->nbSamples_ * exp(-this->mod_->r_*this->opt_->getMaturity());
     double EmCarre;

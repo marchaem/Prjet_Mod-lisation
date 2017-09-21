@@ -4,6 +4,7 @@
 #include "pnl/pnl_matrix.h"
 #include <iostream>
 #include <vector>
+#include "parser.hpp"
 using namespace std;
 
 /// \brief Classe Option abstraite
@@ -25,6 +26,7 @@ public:
     Option(double T, int nbTImeSteps, int size,std::vector <double> coefficient); // constructeur  
     Option(Option const& autre); // constructeur par copie
     ~Option();
+    Option(Param *P);
     double getMaturity();
     void setnbTimeSteps(int n);
     void setMaturity(float T);
