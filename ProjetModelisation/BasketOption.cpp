@@ -26,6 +26,11 @@ BasketOption::BasketOption(double maturity, int nbtime, int size,double strike,s
 
 BasketOption::BasketOption(const BasketOption& orig): Option(orig), Strike_(orig.Strike_){
 }
+BasketOption::BasketOption(Param* P): Option(P) {
+    
+    P->extract("strike", this->Strike_);
+ 
+}
 
 BasketOption::~BasketOption() {
 }

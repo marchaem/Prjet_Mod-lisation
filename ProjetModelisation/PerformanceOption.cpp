@@ -15,7 +15,9 @@ PerformanceOption::PerformanceOption(double maturity, int nbtime, int size, std:
 }
 PerformanceOption::PerformanceOption(const PerformanceOption& orig):Option(orig) {
 }
-
+PerformanceOption::PerformanceOption(Param* P):Option(P){
+    
+}
 PerformanceOption::~PerformanceOption() {
 }
 double PerformanceOption::payoff(const PnlMat *path){

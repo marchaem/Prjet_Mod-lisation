@@ -14,6 +14,7 @@ public:
     PerformanceOption(double maturity, int nbtime, int size);
     PerformanceOption(double maturity, int nbtime, int size,std::vector <double> coefficient);
     PerformanceOption(const PerformanceOption& orig);
+    PerformanceOption(Param * P);
     virtual ~PerformanceOption();
     double payoff(const PnlMat *path);
     void toString();
