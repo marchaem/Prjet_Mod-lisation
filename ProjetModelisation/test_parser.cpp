@@ -54,14 +54,8 @@ int main(int argc, char **argv)
     
     BlackScholesModel *testModel = new BlackScholesModel(P);
     double prix,mc;
-    vector<double> vect (size,1.0/size);
-    BasketOption *basket =new BasketOption(P);
-    AsianOption *asian=new AsianOption(P);
-    PerformanceOption *perf=new PerformanceOption(P);
-    MonteCarlo *mt1 =new MonteCarlo(testModel,basket,0.00001,n_samples);
+    MonteCarlo *mt =new MonteCarlo(P);
 
-    MonteCarlo *mt2 =new MonteCarlo(testModel,asian,0.00001,n_samples);
-    MonteCarlo *mt3 =new MonteCarlo(testModel,perf,0.00001,n_samples);
     PnlRng * rng=pnl_rng_create(0);
     pnl_rng_sseed(rng,time(NULL));
     PnlVect * delta=pnl_vect_create(size);
@@ -69,7 +63,7 @@ int main(int argc, char **argv)
     past=pnl_mat_transpose(past);
     PnlMat * path=pnl_mat_create(size,timestep+1);
    // mt2->price(prix,mc);
-    mt2->price(past,0.0001,prix,mc);
+    mt->price(past,0.0,prix,mc);
     cout <<"fini"<<endl;
     
     

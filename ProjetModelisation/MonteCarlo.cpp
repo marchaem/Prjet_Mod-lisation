@@ -1,10 +1,32 @@
 using namespace std;
 #include "MonteCarlo.hpp"
 #include "Option.hpp"
+#include "BasketOption.hpp"
+#include "AsianOption.hpp"
+#include "PerformanceOption.hpp"
 
 
-MonteCarlo::MonteCarlo() {
-
+MonteCarlo::MonteCarlo(Param *P) {
+    this->mod_=new BlackScholesModel(P);
+    char* typeoption;
+    P->extract("option type",typeoption);
+    if (strcmp(typeoption,"basket")){
+        this->opt_= new BasketOption(P);
+    }
+    else if (strcmp(typeoption,"asian")){     
+        this->opt_=new AsianOption(P);
+        }
+    else if(strcmp(typeoption,"performance")){            
+        this->opt_=new PerformanceOption(P); 
+    }
+    else{
+        throw string("Nous ne connaissons ce type d'option, veuillez-vous adresser à monsieur Taramasco");
+        }
+    this->rng_=pnl_rng_create(0);
+    pnl_rng_sseed(this->rng_,time(NULL));
+    P->extract("sample number",this->nbSamples_);
+    P->extract("timestep number",this->fdStep_);
+    
 }
 
 
@@ -21,15 +43,10 @@ void MonteCarlo::price(double &prix, double &ic) {
     double PrixCumul = 0.0;
     double sommeCarres = 0.0;
     double ecartype=0.0;
-    
-    PnlRng *rng = pnl_rng_create(0);
-    pnl_rng_sseed(rng,time(NULL));
     PnlMat *mat = pnl_mat_create(this->mod_->size_,this->opt_->getnbTimeSteps()+1);
-
     for(int j=0; j < this->nbSamples_; j++){   
-        this->mod_->asset(mat,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),rng); 
+        this->mod_->asset(mat,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),this->rng_); 
         payoffCour=this->opt_->payoff(mat);
-        cout<<"payoff 0:"<<payoffCour<<endl;
         PrixCumul+=payoffCour;
         sommeCarres+=pow(payoffCour,2);       
     }
@@ -40,7 +57,6 @@ void MonteCarlo::price(double &prix, double &ic) {
     ic = 1.96*2 *sqrt(EmCarre)/sqrt(this->nbSamples_);
     cout <<"le prix vaut "<<prix<<" et ecart type :"<<ecartype<<endl;
     pnl_mat_free(&mat);
-    pnl_rng_free(&rng);
     
 }
 
@@ -48,11 +64,9 @@ void MonteCarlo::price(double &prix, double &ic) {
 void MonteCarlo::price(const PnlMat* past, double t, double& prix, double& ic) {
     double payoffCour = 0.0;
     double PrixCumul = 0.0;
-    double sommeCarres = 0.0;
-    double ecartype=0.0;
-    int nbColConsta=past->n-1;
     double tolerance=0.0001;
     double t_cour=0.0;
+    int nbColConsta=past->n-1;
     while(t_cour<=this->opt_->getMaturity()){
         if(t>=t_cour-tolerance && t<=t_cour+tolerance){
             cout<<"t est sur la grille"<<endl; 
@@ -66,58 +80,73 @@ void MonteCarlo::price(const PnlMat* past, double t, double& prix, double& ic) {
         cout <<"le past n'est pas bon pour pricer en t"<<endl;
         return;
     }
-    PnlRng *rng = pnl_rng_create(0);
-    pnl_rng_sseed(rng,time(NULL));
-    PnlMat *mat = pnl_mat_create(this->mod_->size_,this->opt_->getnbTimeSteps()+1);
 
+    
+    PnlMat *mat = pnl_mat_create(this->mod_->size_,this->opt_->getnbTimeSteps()+1);
     for(int j=0; j < this->nbSamples_; j++){   
-        this->mod_->asset(mat,t,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),rng,past); 
+        this->mod_->asset(mat,t,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),this->rng_,past); 
         payoffCour=this->opt_->payoff(mat);
         PrixCumul+=payoffCour;     
     }
     prix = PrixCumul/this->nbSamples_ * exp(-this->mod_->r_*(this->opt_->getMaturity()-t));
     cout <<"le prix vaut "<<prix<<endl;
+    pnl_mat_free(&mat);
+    
 }
 
-void MonteCarlo::delta(const PnlMat* past, double t, PnlVect* delta) {
+void MonteCarlo::delta(const PnlMat* past, double t, PnlVect* delta) {   
+    if(t==0.0)
+        calcDelta0(past,delta);         
+    else
+        CalcDelta_t(past,t,delta);
+    
+    
+    
+}
+
+void MonteCarlo::calcDelta0(const PnlMat* past, PnlVect* delta) {
     PnlMat * path = pnl_mat_create(this->opt_->getsize(),this->opt_->getnbTimeSteps()+1);
-    PnlRng * rng = pnl_rng_create(0);
     PnlMat * shiftplus = pnl_mat_create(this->opt_->getsize(),this->opt_->getnbTimeSteps()+1);
     PnlMat * shiftmoins = pnl_mat_create(this->opt_->getsize(),this->opt_->getnbTimeSteps()+1);
     double timestep=(this->opt_->getMaturity())/this->opt_->getnbTimeSteps();
     double payoffplus;
     double payoffmoins;
     double tmp=0.0;
-    if(t==0.0){
-        cout <<"on est dans le if"<<endl;
-        for (int i =0; i< this->opt_->getsize();i++){
+    for (int i =0; i< this->opt_->getsize();i++){
             for (int j=0 ; j<this->nbSamples_; j++){
-                this->mod_->asset(path,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),rng);
+                this->mod_->asset(path,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),this->rng_);
                 this->mod_->shiftAsset(shiftplus,path,i,this->fdStep_,0.0,timestep);
                 this->mod_->shiftAsset(shiftmoins,path,i,-this->fdStep_,0.0,timestep);
-                cout <<"on est dans la boucle"<<endl;
                 payoffmoins=this->opt_->payoff(shiftmoins);
                 payoffplus= this->opt_->payoff(shiftplus);
-                cout <<"payoffplus vaut" <<payoffplus<<endl;
-                cout <<"payoffmoins vaut" <<payoffmoins<<endl;
                 tmp+=payoffplus-payoffmoins;
             }
-            cout << "après le for du delta "<< path->n <<endl;
             tmp/= this->nbSamples_*this->fdStep_*2*MGET(past,i,past->n-1);
-            cout <<"après le GET" << endl;
-            tmp*=exp(-(this->mod_->r_*(this->opt_->getMaturity()-t)));
+            tmp*=exp(-(this->mod_->r_*(this->opt_->getMaturity())));
             pnl_vect_set(delta,i,tmp);
-            cout << "après le set et tmp vaut"<<tmp<<endl;
             tmp=0.0;
         }
+    pnl_mat_free(&path);
+    pnl_mat_free(&shiftplus);
+    pnl_mat_free(&shiftmoins);
+    
+
         
-    }
-    else{
-        for (int i =0; i< this->opt_->getsize();i++){
+}
+
+void MonteCarlo::CalcDelta_t(const PnlMat* past, double t, PnlVect* delta) {
+    PnlMat * path = pnl_mat_create(this->opt_->getsize(),this->opt_->getnbTimeSteps()+1);
+    PnlMat * shiftplus = pnl_mat_create(this->opt_->getsize(),this->opt_->getnbTimeSteps()+1);
+    PnlMat * shiftmoins = pnl_mat_create(this->opt_->getsize(),this->opt_->getnbTimeSteps()+1);
+    double timestep=(this->opt_->getMaturity())/this->opt_->getnbTimeSteps();
+    double payoffplus;
+    double payoffmoins;
+    double tmp=0.0;
+    for (int i =0; i< this->opt_->getsize();i++){
                  for (int j ; j<this->nbSamples_; j++){
-                    this->mod_->asset(path,t,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),rng,past);
-                    this->mod_->shiftAsset(shiftplus,path,i,this->fdStep_,0.0,timestep);
-                    this->mod_->shiftAsset(shiftmoins,path,i,-this->fdStep_,0.0,timestep);
+                    this->mod_->asset(path,t,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),this->rng_,past);
+                    this->mod_->shiftAsset(shiftplus,path,i,this->fdStep_,t,timestep);
+                    this->mod_->shiftAsset(shiftmoins,path,i,-this->fdStep_,t,timestep);
                     payoffmoins =this->opt_->payoff(shiftmoins);
                     payoffplus= this->opt_->payoff(shiftplus);
                     tmp+=payoffplus-payoffmoins;
@@ -127,17 +156,9 @@ void MonteCarlo::delta(const PnlMat* past, double t, PnlVect* delta) {
                 pnl_vect_set(delta,i,tmp);
                 tmp=0.0;
         }
-    }
-    
-    
-}
-
-void MonteCarlo::calcDelta0(const PnlMat* past, PnlVect* delta) {
-    
-}
-
-void MonteCarlo::CalcDelta_t(const PnlMat* past, double t, PnlVect* delta) {
-
+    pnl_mat_free(&path);
+    pnl_mat_free(&shiftplus);
+    pnl_mat_free(&shiftmoins);
 }
 
 
