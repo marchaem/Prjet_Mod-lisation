@@ -1,10 +1,37 @@
 using namespace std;
 #include "MonteCarlo.hpp"
 #include "Option.hpp"
+#include "BasketOption.hpp"
+#include "AsianOption.hpp"
+#include "PerformanceOption.hpp"
 
 
-MonteCarlo::MonteCarlo() {
-
+MonteCarlo::MonteCarlo(Param *P) {
+    this->mod_=new BlackScholesModel(P);
+    char* typeoption;
+    P->extract("option type",typeoption);
+    if (strcmp(typeoption,"basket")){
+        this->opt_= new BasketOption(P);
+    }
+    else {
+        if (strcmp(typeoption,"asian")){
+            this->opt_=new AsianOption(P);
+        }
+        else{
+            if(strcmp(typeoption,"performance")){
+                this->opt_=new PerformanceOption(P);
+            }
+            else{
+                throw string("Nous ne connaissons ce type d'option, veuillez vous adresser à monsieur Taramasco");
+            }
+        }
+    }
+    
+    this->rng_= pnl_rng_create(0);
+    pnl_rng_sseed(this->rng_,time(NULL));
+    P->extract("sample number",this->nbSamples_);
+    P->extract("timestep number",this->fdStep_);
+    
 }
 
 
