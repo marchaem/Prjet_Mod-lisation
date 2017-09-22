@@ -17,28 +17,29 @@ MonteCarlo::MonteCarlo(BlackScholesModel* black, Option* opt, double fdStep, int
 
 
 void MonteCarlo::price(double &prix, double &ic) {
+    
     double payoffCour = 0.0;
     double PrixCumul = 0.0;
     double sommeCarres = 0.0;
-    double ecartype=0.0;
+    
     
     PnlRng *rng = pnl_rng_create(0);
     pnl_rng_sseed(rng,time(NULL));
     PnlMat *mat = pnl_mat_create(this->mod_->size_,this->opt_->getnbTimeSteps()+1);
-
+    
     for(int j=0; j < this->nbSamples_; j++){   
-        this->mod_->asset(mat,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),rng); 
+        this->mod_->asset(mat,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),rng);                    
         payoffCour=this->opt_->payoff(mat);
-        cout<<"payoff 0:"<<payoffCour<<endl;
         PrixCumul+=payoffCour;
         sommeCarres+=pow(payoffCour,2);       
     }
+    
     prix = PrixCumul/this->nbSamples_ * exp(-this->mod_->r_*this->opt_->getMaturity());
     double EmCarre;
     EmCarre = ( sommeCarres/this->nbSamples_ - pow((PrixCumul/this->nbSamples_),2) ) * exp(-2*this->mod_->r_*this->opt_->getMaturity());
-    ecartype=sqrt(EmCarre)/sqrt(this->nbSamples_);
-    ic = 1.96*2 *sqrt(EmCarre)/sqrt(this->nbSamples_);
-    cout <<"le prix vaut "<<prix<<" et ecart type :"<<ecartype<<endl;
+    
+    ic = 1.96*2 * sqrt(EmCarre) / sqrt(this->nbSamples_);
+    cout <<"le prix vaut "<<prix<<"et ic :"<<ic<<endl;
     pnl_mat_free(&mat);
     pnl_rng_free(&rng);
     
@@ -46,37 +47,7 @@ void MonteCarlo::price(double &prix, double &ic) {
 
 
 void MonteCarlo::price(const PnlMat* past, double t, double& prix, double& ic) {
-    double payoffCour = 0.0;
-    double PrixCumul = 0.0;
-    double sommeCarres = 0.0;
-    double ecartype=0.0;
-    int nbColConsta=past->n-1;
-    double tolerance=0.0001;
-    double t_cour=0.0;
-    while(t_cour<=this->opt_->getMaturity()){
-        if(t>=t_cour-tolerance && t<=t_cour+tolerance){
-            cout<<"t est sur la grille"<<endl; 
-            t=t_cour;
-        }
-        t_cour+=this->opt_->getMaturity()/this->opt_->getnbTimeSteps();
-    }
-    double pas = this->opt_->getMaturity()/this->opt_->getnbTimeSteps();
-    double t_i=(nbColConsta-1)*pas;
-    if(!(t>=t_i && t<=t_i+pas)){
-        cout <<"le past n'est pas bon pour pricer en t"<<endl;
-        return;
-    }
-    PnlRng *rng = pnl_rng_create(0);
-    pnl_rng_sseed(rng,time(NULL));
-    PnlMat *mat = pnl_mat_create(this->mod_->size_,this->opt_->getnbTimeSteps()+1);
 
-    for(int j=0; j < this->nbSamples_; j++){   
-        this->mod_->asset(mat,t,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),rng,past); 
-        payoffCour=this->opt_->payoff(mat);
-        PrixCumul+=payoffCour;     
-    }
-    prix = PrixCumul/this->nbSamples_ * exp(-this->mod_->r_*(this->opt_->getMaturity()-t));
-    cout <<"le prix vaut "<<prix<<endl;
 }
 
 void MonteCarlo::delta(const PnlMat* past, double t, PnlVect* delta) {
