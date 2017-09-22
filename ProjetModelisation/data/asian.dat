@@ -13,7 +13,7 @@ correlation         <float>   0.0
 
 option type         <string>  asian
 payoff coefficients <vector>  0.5
-
+hedging dates number <int>    300
 
 timestep number     <int>     150
 sample number       <long>    50000
