@@ -6,6 +6,7 @@
 #include "AsianOption.hpp"
 #include "BasketOption.hpp"
 #include "PerformanceOption.hpp"
+#include <time.h>
 
 using namespace std;
 
@@ -61,16 +62,14 @@ int main(int argc, char **argv)
 
     MonteCarlo *mt2 =new MonteCarlo(testModel,asian,0.00001,n_samples);
     MonteCarlo *mt3 =new MonteCarlo(testModel,perf,0.00001,n_samples);
-
+    PnlRng * rng=pnl_rng_create(0);
+    pnl_rng_sseed(rng,time(NULL));
     PnlVect * delta=pnl_vect_create(size);
-   // PnlMat * mat=pnl_mat_create(size,1);
-   // pnl_mat_set_col(mat,testModel->spot_,1);
-   // pnl_mat_print(mat);
-    cout << "go delta"<<endl;
-    //mt1->delta(mat,0.0,delta);
-    mt3->price(prix,mc);
-    cout <<"delta fini"<<endl;
-    pnl_vect_print(delta);
+    PnlMat * past=pnl_mat_create_from_file("data/market-data/manu.dat");
+    past=pnl_mat_transpose(past);
+    PnlMat * path=pnl_mat_create(size,timestep+1);
+   // mt2->price(prix,mc);
+    mt2->price(past,0.0001,prix,mc);
     cout <<"fini"<<endl;
     
     
