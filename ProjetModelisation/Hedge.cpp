@@ -10,8 +10,9 @@
 
 
 
-Hedge::Hedge(Param *P, char* fichier){
+Hedge::Hedge(Param* P, char* fichier){
     this->mt_= new MonteCarlo(P);
+    cout<<"je suis sorti de monteCarlo"<<endl;
     int nbtbalencement;
     P->extract("hedging dates number",nbtbalencement);
     this->delta= pnl_mat_create(this->mt_->opt_->getsize(),nbtbalencement);
@@ -55,7 +56,18 @@ void Hedge::Majall(){
         t+=pasDetps;
         past=getHisto(t);        
     }
+    PnlVect * Sfin = pnl_vect_create(this->mt_->opt_->getsize());
+    pnl_mat_get_col(Sfin,this->past,(this->past->n)-1);
+    PnlVect * deltafin = pnl_vect_create(this->mt_->opt_->getsize());
+    pnl_mat_get_col(deltafin,this->delta,(this->delta->n)-1);
+    this->profit_and_lost+= pnl_vect_scalar_prod(deltafin,Sfin);
+    PnlMat * trajectoire= pnl_mat_create(this->mt_->opt_->getsize(),this->mt_->opt_->getnbTimeSteps()+1);
+    this->mt_->mod_->asset(trajectoire,this->mt_->opt_->getMaturity(),this->mt_->opt_->getnbTimeSteps(),this->mt_->rng_);
+    this->profit_and_lost-= this->mt_->opt_->payoff(trajectoire);
     pnl_mat_free(&past);
+    pnl_vect_free(&Sfin);
+    pnl_vect_free(&deltafin);
+    pnl_mat_free(&trajectoire);
 }
 
 PnlMat * Hedge::getHisto(double t){
@@ -85,4 +97,7 @@ PnlMat* Hedge::getdelta(){
 }
 void Hedge::setDelta(PnlMat* delta){
     this->delta=delta;
+}
+double Hedge::getPandL(){
+    return this->profit_and_lost;
 }

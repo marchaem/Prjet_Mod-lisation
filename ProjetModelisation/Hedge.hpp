@@ -27,6 +27,7 @@ public:
     int getIndice(double t);
     void Majall();
     PnlMat * getHisto(double t);
+    double getPandL();
 private:
     MonteCarlo * mt_;
     PnlMat* delta;

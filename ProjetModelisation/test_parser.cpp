@@ -7,6 +7,8 @@
 #include "BasketOption.hpp"
 #include "PerformanceOption.hpp"
 #include <time.h>
+#include "Hedge.hpp"
+
 
 using namespace std;
 
@@ -52,7 +54,7 @@ int main(int argc, char **argv)
     P->extract("timestep number",timestep);
     
     
-    BlackScholesModel *testModel = new BlackScholesModel(P);
+   /* BlackScholesModel *testModel = new BlackScholesModel(P);
     double prix,mc;
     MonteCarlo *mt =new MonteCarlo(P);
 
@@ -72,5 +74,13 @@ int main(int argc, char **argv)
     pnl_vect_free(&divid);
     delete P;
 
-    exit(0);
+    exit(0);*/
+
+   /* char* file= (char*) "data/market-data/simul_asian.dat";
+    Hedge *portefeuille = new Hedge(P,file);
+    portefeuille->Majall();
+    double pl = portefeuille->getPandL();
+    cout<< "l'error de tracking est de : "<< pl<< endl;*/
+     
+    
 }
