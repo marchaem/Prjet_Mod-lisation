@@ -9,23 +9,30 @@
 #define	HEDGE_HPP
 
 #include "Option.hpp"
+#include "MonteCarlo.hpp"
 
 
 
 class Hedge {
 public:
-    Hedge();
-    Hedge(Option option);
+    
+    Hedge(Param * P, char *  file);
     
     Hedge(const Hedge& orig);
     virtual ~Hedge();
-    Option getOption();
-    void setOption(Option option);
+    
     PnlMat* getdelta();
     void setDelta(PnlMat* delta);
+    void Maj(double t, const PnlMat* past);
+    int getIndice(double t);
+    void Majall();
+    PnlMat * getHisto(double t);
+    double getPandL();
 private:
-    Option option_;
+    MonteCarlo * mt_;
     PnlMat* delta;
+    PnlMat* past;
+    double profit_and_lost;
 };
 
 #endif	/* HEDGE_HPP */
