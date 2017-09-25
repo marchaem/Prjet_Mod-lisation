@@ -4,7 +4,7 @@
 #include "pnl/pnl_vector.h"
 
 using namespace std;
-/*
+
 int main()
 {
     PnlVect *G = pnl_vect_new();
@@ -32,4 +32,4 @@ int main()
     pnl_vect_free(&G);
     pnl_rng_free(&rng);
     return 0;
-}*/
+}
