@@ -11,7 +11,7 @@
 /*
  * Simple C++ Test Suite
  */
-/*
+
 void test1() {
     std::cout << "TestPerformance test 1" << std::endl;
     std::vector<double> second (2,0.5);
@@ -56,5 +56,4 @@ int main(int argc, char** argv) {
 
     return (EXIT_SUCCESS);
 }
- */
 

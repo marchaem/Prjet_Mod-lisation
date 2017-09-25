@@ -1,13 +1,14 @@
 #include <iostream>
 #include <string>
-#include "parser.hpp"
-#include "BlackScholesModel.hpp"
-#include "MonteCarlo.hpp"
-#include "AsianOption.hpp"
-#include "BasketOption.hpp"
+#include "../src/parser.hpp"
+#include "../src/BlackScholesModel.hpp"
+#include "../src/MonteCarlo.hpp"
+#include "../src/AsianOption.hpp"
+#include "../src/BasketOption.hpp"
+#include "../src/Hedge.hpp"
 
 using namespace std;
-/*
+
 int main(int argc, char **argv)
 {
     double T, r, strike;
@@ -50,7 +51,7 @@ int main(int argc, char **argv)
     P->extract("timestep number",timestep);
     
     
-    BlackScholesModel *testModel = new BlackScholesModel(P);
+    /*BlackScholesModel *testModel = new BlackScholesModel(P);
     double prix,mc;
     vector<double> vect (size,1.0/size);
     BasketOption *basket =new BasketOption(P);
@@ -76,5 +77,12 @@ int main(int argc, char **argv)
     delete P;
 
     exit(0);
+     */
+    /*char * file= "data/market-data/simul_asian.dat";
+    Hedge portefeuille = new Hedge(P,file);
+    portefeuille.Majall();
+    double pl = portefeuille.getPandL();
+    cout<< "l'error de tracking est de : "<< pl<< endl;
+     */
+    
 }
-*/

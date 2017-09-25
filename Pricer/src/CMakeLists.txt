@@ -1,6 +1,6 @@
 add_library(Cpp
   SHARED
-  *.cpp)
+  AsianOption.cpp BasketOption.cpp BlackScholesModel.cpp  Hedge.cpp MonteCarlo.cpp Option.cpp PerformanceOption.cpp parser.cpp)
 
 install (TARGETS Cpp
 	 DESTINATION lib)

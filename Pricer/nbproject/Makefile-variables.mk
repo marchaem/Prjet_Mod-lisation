@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux-x86
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux-x86
-CND_ARTIFACT_NAME_Debug=projetmodelisation
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/projetmodelisation
+CND_ARTIFACT_NAME_Debug=pricer
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/pricer
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Debug=projetmodelisation.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/projetmodelisation.tar
+CND_PACKAGE_NAME_Debug=pricer.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/pricer.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux-x86
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
-CND_ARTIFACT_NAME_Release=projetmodelisation
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/projetmodelisation
+CND_ARTIFACT_NAME_Release=pricer
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/pricer
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Release=projetmodelisation.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/projetmodelisation.tar
+CND_PACKAGE_NAME_Release=pricer.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/pricer.tar
 #
 # include compiler specific variables
 #
