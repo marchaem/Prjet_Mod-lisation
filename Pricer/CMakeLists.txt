@@ -47,8 +47,7 @@ target_link_libraries(mc-example ${LIBS})
 # target_link_libraries(mc-pricer ${LIBS})
 # install(TARGETS mc-pricer DESTINATION bin)
 
-
-#add_subdirectory(src)
+add_subdirectory(src)
 
 
 #Configuration de l'exécutable
@@ -59,17 +58,20 @@ file(
 
         source_files
 
-        src/*
+        test_parser.cpp
+        #src/*
 
 )
 
 add_executable(
 
-        my_exe
+        pricer
 
         ${source_files}
 
 )
+target_link_libraries(pricer ${LIBS})
+target_link_libraries(pricer Cpp)
 
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)

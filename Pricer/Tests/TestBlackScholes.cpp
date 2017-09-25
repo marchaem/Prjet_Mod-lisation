@@ -7,8 +7,8 @@
 
 #include <cstdlib>
 #include <iostream>
-#include "../parser.hpp"
-#include "../BlackScholesModel.hpp"
+#include "../src/parser.hpp"
+#include "../src/BlackScholesModel.hpp"
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"

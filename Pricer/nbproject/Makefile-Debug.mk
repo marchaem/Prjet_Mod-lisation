@@ -71,11 +71,11 @@ LDLIBSOPTIONS=-L/matieres/5MMPMP6/pnl/lib -lpnl
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/projetmodelisation
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/pricer
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/projetmodelisation: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/pricer: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/projetmodelisation ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/pricer ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/AsianOption.o: AsianOption.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -163,7 +163,7 @@ ${OBJECTDIR}/test_parser.o: test_parser.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/projetmodelisation
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/pricer
 
 # Subprojects
 .clean-subprojects:

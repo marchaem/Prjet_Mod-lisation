@@ -8,13 +8,13 @@
 #include <stdlib.h>
 #include <iostream>
 
-#include "AsianOption.hpp"
+#include "../src/AsianOption.hpp"
 
 
 /*
  * Simple C++ Test Suite
  */
-/*
+
 void test1() {
     std::cout << "TestAsian test 1" << std::endl;
     std::cout << "testBasket test 1" << std::endl;
@@ -25,13 +25,6 @@ void test1() {
     Asian->toString();
     
     
-    
-    
-    
-    
-    
-    
- 
     PnlMat* test = pnl_mat_create_from_scalar(5,2,9.0);
     MLET(test,2,1)=4.0;
     MLET(test,0,0)=3.0;
@@ -61,6 +54,5 @@ int main(int argc, char** argv) {
     std::cout << "%SUITE_FINISHED% time=0" << std::endl;
 
     return (EXIT_SUCCESS);
- 
-}*/
+}
 

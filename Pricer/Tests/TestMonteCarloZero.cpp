@@ -7,10 +7,10 @@
 
 #include <cstdlib>
 #include <iostream>
-#include "../parser.hpp"
-#include "../BlackScholesModel.hpp"
-#include "../AsianOption.hpp"
-#include "../MonteCarlo.hpp"
+#include "../src/parser.hpp"
+#include "../src/BlackScholesModel.hpp"
+#include "../src/AsianOption.hpp"
+#include "../src/MonteCarlo.hpp"
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"

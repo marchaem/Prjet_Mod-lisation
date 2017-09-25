@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=ProjetModelisation
+PROJECTNAME=Pricer
 
 # Active Configuration
 DEFAULTCONF=Debug
