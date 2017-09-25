@@ -38,15 +38,38 @@ endif()
 set(LIBS ${LIBS} m)
 
 # Testing the parser
-add_executable(parser-test src/parser.cpp src/test_parser.cpp)
+add_executable(parser-test src/parser.cpp Tests/test_parser.cpp)
 target_link_libraries(parser-test ${LIBS})
-add_executable(mc-example src/mc_example.cpp)
+add_executable(mc-example Tests/mc_example.cpp)
 target_link_libraries(mc-example ${LIBS})
 
 # add_executable(mc-pricer src/parser.cpp src/pricer.cpp)
 # target_link_libraries(mc-pricer ${LIBS})
 # install(TARGETS mc-pricer DESTINATION bin)
 
+
+#add_subdirectory(src)
+
+
+#Configuration de l'exécutable
+
+file(
+
+        GLOB_RECURSE
+
+        source_files
+
+        src/*
+
+)
+
+add_executable(
+
+        my_exe
+
+        ${source_files}
+
+)
 
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)
