@@ -144,6 +144,7 @@ void MonteCarlo::calcDelta0(const PnlMat* past, PnlVect* delta) {
                 payoffplus= this->opt_->payoff(shiftplus);
                 tmp+=payoffplus-payoffmoins;
             }
+            pnl_mat_print(past);
             tmp/= this->nbSamples_*this->fdStep_*2*MGET(past,i,past->n-1);
             tmp*=exp(-(this->mod_->r_*(this->opt_->getMaturity())));
             pnl_vect_set(delta,i,tmp);
@@ -170,7 +171,8 @@ void MonteCarlo::CalcDelta_t(const PnlMat* past, double t, PnlVect* delta) {
     double payoffmoins;
     double tmp=0.0;
     for (int i =0; i< this->opt_->getsize();i++){
-                 for (int j ; j<this->nbSamples_; j++){
+            for (int j=0 ; j<this->nbSamples_; j++){
+                
                     this->mod_->asset(path,t,this->opt_->getMaturity(),this->opt_->getnbTimeSteps(),this->rng_,past);
                     this->mod_->shiftAsset(shiftplus,path,i,this->fdStep_,t,timestep);
                     this->mod_->shiftAsset(shiftmoins,path,i,-this->fdStep_,t,timestep);
@@ -178,7 +180,7 @@ void MonteCarlo::CalcDelta_t(const PnlMat* past, double t, PnlVect* delta) {
                     payoffplus= this->opt_->payoff(shiftplus);
                     tmp+=payoffplus-payoffmoins;
             }
-                tmp/= this->nbSamples_*this->fdStep_*2*MGET(past,i,path->n);   
+                tmp/= this->nbSamples_*this->fdStep_*2*MGET(past,i,past->n-1);
                 tmp*=exp(-(this->mod_->r_*(this->opt_->getMaturity()-t)));
                 pnl_vect_set(delta,i,tmp);
                 tmp=0.0;

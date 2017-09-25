@@ -65,7 +65,6 @@ void BlackScholesModel::asset(PnlMat* path, double t, double T, int nbTimeSteps,
     pnl_mat_rng_normal(matGi, this->size_,nbTimeSteps, rng);
     PnlVect *Gi = pnl_vect_create(this->size_);
     PnlVect* Ld = pnl_vect_create(this->size_);
-    
     for (int d=0; d<this->size_; d++) {
         St = pnl_mat_get(past,d,(past->n)-1);
         sigmad = pnl_vect_get(this->sigma_,d);
@@ -117,5 +116,10 @@ int BlackScholesModel::getPasTemps(double t, double timestep,int nbTimeStep) {
     }
     return indiceCour-1;
 }
+
+PnlMat* BlackScholesModel::simul_market() {
+    
+}
+
 
 

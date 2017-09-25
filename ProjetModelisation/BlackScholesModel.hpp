@@ -14,6 +14,7 @@ public:
     double rho_; /// paramètre de corrélation
     PnlVect *sigma_; /// vecteur de volatilités
     PnlVect *spot_; /// valeurs initiales du sous-jacent
+    PnlVect *trend_; /// valeurs de marché
     
     BlackScholesModel(Param *param);
 
@@ -59,6 +60,8 @@ public:
      * @param[in] timestep pas de constatation du sous-jacent
      */
     void shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep);
+    
+    PnlMat * simul_market();
     
     int getPasTemps(double t, double timestep,int nbtimestep);
 

@@ -27,6 +27,7 @@ public:
     void Majall();
     PnlMat * getHisto(double t);
     double getPandL();
+    PnlMat * GetTrajectoire();
 private:
     MonteCarlo * mt_;
     PnlMat* delta;
