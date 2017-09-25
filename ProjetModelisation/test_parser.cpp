@@ -18,8 +18,9 @@ int main(int argc, char **argv)
     PnlVect *spot, *sigma, *divid;
     string type;
     int size;
+    int timestep;
     size_t n_samples;
-
+    double prix,ic;
     char *infile = argv[1];
     Param *P = new Parser(infile);
 
@@ -34,7 +35,7 @@ int main(int argc, char **argv)
         divid = pnl_vect_create_from_zero(size);
     }
     P->extract("strike", strike);
-    P->extract("sample number", n_samples);
+  //  P->extract("sample number", n_samples);
 
     P->print();
     cout << endl;
@@ -49,9 +50,9 @@ int main(int argc, char **argv)
     pnl_vect_print_asrow(spot);
     cout << "volatility ";
     pnl_vect_print_asrow(sigma);
-    cout << "Number of samples " << n_samples << endl;
-    int timestep;
+    cout << "Number of samples " << n_samples << endl; 
     P->extract("timestep number",timestep);
+    cout<<"timestep "<<timestep<<endl;
     
     
    /* BlackScholesModel *testModel = new BlackScholesModel(P);
@@ -75,10 +76,15 @@ int main(int argc, char **argv)
     delete P;
 
     exit(0);*/
-
-   /* char* file= (char*) "data/market-data/simul_asian.dat";
-    Hedge *portefeuille = new Hedge(P,file);
+    PnlMat * past=pnl_mat_create(size,timestep);
+    PnlVect *delt=pnl_vect_create(size);
+    //char * file= "data/market-data/simul_asian.dat";
+    MonteCarlo *mt =new MonteCarlo(P);
+    mt->price(prix,ic);
+    mt->delta(past,0.0,delt);
+  /*  Hedge * portefeuille = new Hedge(P,file);
     portefeuille->Majall();
+    cout << "on sort de Majall"<<endl;
     double pl = portefeuille->getPandL();
     cout<< "l'error de tracking est de : "<< pl<< endl;*/
      

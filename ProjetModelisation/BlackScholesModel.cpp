@@ -106,11 +106,11 @@ void BlackScholesModel::shiftAsset(PnlMat* shift_path, const PnlMat* path, int d
 }
 
 int BlackScholesModel::getPasTemps(double t, double timestep,int nbTimeStep) {
+    if(t==0)
+        return 0;
     double pasDeTps = timestep;
     int indiceCour = 0;
     double dist = 0;
-    if(t==0)
-        return 0;
     while (dist <= t) {
         dist += pasDeTps;
         indiceCour++;

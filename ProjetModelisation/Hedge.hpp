@@ -8,19 +8,18 @@
 #ifndef HEDGE_HPP
 #define	HEDGE_HPP
 
+#pragma once
+
 #include "Option.hpp"
 #include "MonteCarlo.hpp"
 
 
 
 class Hedge {
-public:
-    
-    Hedge(Param * P, char *  file);
-    
+public:    
+    Hedge(Param * P, char *  file);    
     Hedge(const Hedge& orig);
-    virtual ~Hedge();
-    
+    virtual ~Hedge();   
     PnlMat* getdelta();
     void setDelta(PnlMat* delta);
     void Maj(double t, const PnlMat* past);
