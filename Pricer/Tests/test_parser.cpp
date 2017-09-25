@@ -1,14 +1,11 @@
 #include <iostream>
 #include <string>
-#include "parser.hpp"
-#include "BlackScholesModel.hpp"
-#include "MonteCarlo.hpp"
-#include "AsianOption.hpp"
-#include "BasketOption.hpp"
-#include "PerformanceOption.hpp"
-#include <time.h>
-#include "Hedge.hpp"
-
+#include "../src/parser.hpp"
+#include "../src/BlackScholesModel.hpp"
+#include "../src/MonteCarlo.hpp"
+#include "../src/AsianOption.hpp"
+#include "../src/BasketOption.hpp"
+#include "../src/Hedge.hpp"
 
 using namespace std;
 
@@ -18,9 +15,8 @@ int main(int argc, char **argv)
     PnlVect *spot, *sigma, *divid;
     string type;
     int size;
-    int timestep;
     size_t n_samples;
-    double prix,ic;
+
     char *infile = argv[1];
     Param *P = new Parser(infile);
 
@@ -35,7 +31,7 @@ int main(int argc, char **argv)
         divid = pnl_vect_create_from_zero(size);
     }
     P->extract("strike", strike);
-  //  P->extract("sample number", n_samples);
+    P->extract("sample number", n_samples);
 
     P->print();
     cout << endl;
@@ -50,23 +46,28 @@ int main(int argc, char **argv)
     pnl_vect_print_asrow(spot);
     cout << "volatility ";
     pnl_vect_print_asrow(sigma);
-    cout << "Number of samples " << n_samples << endl; 
+    cout << "Number of samples " << n_samples << endl;
+    int timestep;
     P->extract("timestep number",timestep);
-    cout<<"timestep "<<timestep<<endl;
     
     
-   /* BlackScholesModel *testModel = new BlackScholesModel(P);
+    /*BlackScholesModel *testModel = new BlackScholesModel(P);
     double prix,mc;
-    MonteCarlo *mt =new MonteCarlo(P);
+    vector<double> vect (size,1.0/size);
+    BasketOption *basket =new BasketOption(P);
+    AsianOption *asian=new AsianOption(P);
+    MonteCarlo *mt1 =new MonteCarlo(testModel,basket,0.00001,n_samples);
 
-    PnlRng * rng=pnl_rng_create(0);
-    pnl_rng_sseed(rng,time(NULL));
+    MonteCarlo *mt2 =new MonteCarlo(testModel,asian,0.00001,n_samples);
     PnlVect * delta=pnl_vect_create(size);
-    PnlMat * past=pnl_mat_create_from_file("data/market-data/manu.dat");
-    past=pnl_mat_transpose(past);
-    PnlMat * path=pnl_mat_create(size,timestep+1);
-   // mt2->price(prix,mc);
-    mt->price(past,0.0,prix,mc);
+    PnlMat * mat=pnl_mat_create(size,1);
+    pnl_mat_set_col(mat,testModel->spot_,1);
+    pnl_mat_print(mat);
+    cout << "go delta"<<endl;
+    mt1->delta(mat,0.0,delta);
+    mt1->price(prix,mc);
+    cout <<"delta fini"<<endl;
+    pnl_vect_print(delta);
     cout <<"fini"<<endl;
     
     
@@ -75,18 +76,13 @@ int main(int argc, char **argv)
     pnl_vect_free(&divid);
     delete P;
 
-    exit(0);*/
-    PnlMat * past=pnl_mat_create(size,timestep);
-    PnlVect *delt=pnl_vect_create(size);
-    //char * file= "data/market-data/simul_asian.dat";
-    MonteCarlo *mt =new MonteCarlo(P);
-    mt->price(prix,ic);
-    mt->delta(past,0.0,delt);
-  /*  Hedge * portefeuille = new Hedge(P,file);
-    portefeuille->Majall();
-    cout << "on sort de Majall"<<endl;
-    double pl = portefeuille->getPandL();
-    cout<< "l'error de tracking est de : "<< pl<< endl;*/
-     
+    exit(0);
+     */
+    /*char * file= "data/market-data/simul_asian.dat";
+    Hedge portefeuille = new Hedge(P,file);
+    portefeuille.Majall();
+    double pl = portefeuille.getPandL();
+    cout<< "l'error de tracking est de : "<< pl<< endl;
+     */
     
 }

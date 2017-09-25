@@ -12,7 +12,7 @@ public:
     Option *opt_; /*! pointeur sur l'option */
     PnlRng *rng_; /*! pointeur sur le générateur */
     double fdStep_; /*! pas de différence finie */
-    size_t nbSamples_; /*! nombre de tirages Monte Carlo */
+    int nbSamples_; /*! nombre de tirages Monte Carlo */
 
     MonteCarlo(Param *P);
     MonteCarlo(BlackScholesModel * black, Option * opt, double fdStep, int nbSamples);
@@ -45,7 +45,8 @@ public:
      * @param[out] delta contient le vecteur de delta
      * de confiance sur le calcul du delta
      */
-    void delta(const PnlMat *past, double t, PnlVect *delta);  
+    void delta(const PnlMat *past, double t, PnlVect *delta);
+    
     void calcDelta0(const PnlMat *past, PnlVect *delta);
     void CalcDelta_t(const PnlMat *past, double t, PnlVect *delta);
 };
