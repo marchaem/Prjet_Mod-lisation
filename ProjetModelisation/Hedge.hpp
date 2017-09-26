@@ -28,11 +28,13 @@ public:
     PnlMat * getHisto(double t);
     double getPandL();
     PnlMat * GetTrajectoire();
+    PnlMat * getPast();
 private:
     MonteCarlo * mt_;
     PnlMat* delta;
     PnlMat* past;
     double profit_and_lost;
+    int NbtreRebalencement;
 };
 
 #endif	/* HEDGE_HPP */
