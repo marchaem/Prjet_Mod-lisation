@@ -31,6 +31,8 @@ int parametreSelection(int argc,char **argv){
         }else {
             cout << "option non reconu"<< endl;
         }
+    }else {
+        infile=argv[1];
     }
     return i ;
 }
@@ -52,7 +54,6 @@ int main(int argc, char **argv)
         const clock_t begin_time = clock();
     
         Param *P = new Parser(infile);
-    
         MonteCarlo *mc =new MonteCarlo(P);
         double prix;
         double ic;
