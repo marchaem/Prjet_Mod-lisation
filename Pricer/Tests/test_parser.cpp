@@ -61,7 +61,10 @@ int main(int argc, char **argv)
     double ic;
     mc->price(prix,ic);
     cout<<prix<<endl;
-       cout<<ic<<endl   ;  
+    cout<<ic<<endl; 
+    PnlVect *delta;
+    mc->calcDelta0(delta);
+    cout<<delta<<endl; 
     //fabrication de l option
     /*
     if (type=="asian"){
