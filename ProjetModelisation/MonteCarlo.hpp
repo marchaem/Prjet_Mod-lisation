@@ -46,7 +46,7 @@ public:
      * de confiance sur le calcul du delta
      */
     void delta(const PnlMat *past, double t, PnlVect *delta);  
-    void calcDelta0(const PnlMat *past, PnlVect *delta);
+    void calcDelta0(PnlVect *delta);
     void CalcDelta_t(const PnlMat *past, double t, PnlVect *delta);
 };
 

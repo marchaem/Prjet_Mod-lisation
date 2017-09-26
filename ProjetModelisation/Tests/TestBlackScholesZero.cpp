@@ -7,19 +7,26 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <algorithm>
+#include <functional>
 #include "../parser.hpp"
 #include "../BlackScholesModel.hpp"
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
 #include <time.h>
+#include <numeric>
+#include <vector>
 
 using namespace std;
 
 /*
- * 
+ * Test de la génération de la trajectoire de Black-Scholes en zero
+ * @param[in] argv : fichier d'entrée (basket.dat, asian.dat etc ...)
  */
 int main(int argc, char** argv) {
+    
+    std::cout << "Debut du test" << std::endl;
     
     double T, r, strike;
     PnlVect *spot, *sigma, *divid;
@@ -29,6 +36,8 @@ int main(int argc, char** argv) {
 
     char *infile = argv[1];
     Param *P = new Parser(infile);
+    
+    std::cout << "Fichier d'entrée : " << argv[1] << std::endl;
 
     P->extract("option type", type);
     P->extract("maturity", T);
@@ -56,15 +65,28 @@ int main(int argc, char** argv) {
     std::cout << "Génération de la trajectoire suivant le modèle" 
             << "de Black Scholes" << std::endl;
     
-    std::cout << "Taille de path " << path->m << "*" << path->n << std::endl;
+    std::cout << "Taille de la trajectoire " << path->m << "*" << path->n << std::endl;
     
+    double mean;
+    double sum;
+    double sq_sum;
+    double stdev;
+    
+    vector<double> trajectoire(0);
     for (int i=0; i<path->m; i++) {
         std::cout << "Sous-jacent n° " << i << std::endl;
         for (int j=0; j<path->n; j++) {
-            std::cout << pnl_mat_get(path,i,j);
-            std::cout << "->" << std::endl;
+            //std::cout << pnl_mat_get(path,i,j);
+            //std::cout << "->" << std::endl;
+            trajectoire.push_back(pnl_mat_get(path,i,j));
+            sum = std::accumulate(trajectoire.begin(), trajectoire.end(), 0.0);
+            mean = sum / trajectoire.size();
+            sq_sum = std::inner_product(trajectoire.begin(), trajectoire.end(), trajectoire.begin(), 0.0);
+            stdev = std::sqrt(sq_sum / trajectoire.size() - mean * mean);
         }
-        std::cout << std::endl;
+        std::cout << "Moyenne de la trajectoire du SJ n°" << i <<  " = " << mean << std::endl;
+        std::cout << "Standard Deviation du SJ n°" << i <<  " = " << stdev << std::endl;
+        trajectoire.clear();    
     }
     
     std::cout << "Fin du test" << std::endl;
