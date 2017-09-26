@@ -61,7 +61,8 @@ int main(int argc, char **argv)
     double ic;
     mc->price(prix,ic);
     cout<<prix<<endl;
-       cout<<ic<<endl   ;  
+       cout<<ic<<endl ;
+    
     //fabrication de l option
     /*
     if (type=="asian"){
@@ -129,6 +130,6 @@ int main(int argc, char **argv)
      */
     
     
-    std::cout << float( clock () - begin_time ) << std::endl;
+    cout << float( clock () - begin_time ) << endl;
  
 }

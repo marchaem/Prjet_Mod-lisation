@@ -12,7 +12,7 @@ public:
     Option *opt_; /*! pointeur sur l'option */
     PnlRng *rng_; /*! pointeur sur le générateur */
     double fdStep_; /*! pas de différence finie */
-    int nbSamples_; /*! nombre de tirages Monte Carlo */
+    size_t nbSamples_; /*! nombre de tirages Monte Carlo */
 
     MonteCarlo(Param *P);
     MonteCarlo(BlackScholesModel * black, Option * opt, double fdStep, int nbSamples);
