@@ -61,6 +61,8 @@ public:
      */
     void shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep);
     
+    PnlMat * simul_market();
+    
     int getPasTemps(double t, double timestep,int nbtimestep);
 
 };

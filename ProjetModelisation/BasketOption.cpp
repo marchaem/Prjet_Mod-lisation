@@ -49,7 +49,6 @@ double BasketOption::payoff(const PnlMat *path){
     PnlMat * transp = pnl_mat_transpose(path);
     PnlVect * V = pnl_vect_create(this->getsize());   
     pnl_mat_get_row(V,transp,this->getnbTimeSteps());
-    pnl_vect_print(V);  
     double payoff = 0.0;
     for (int i = 0 ; i< this->getsize() ; i++){
        

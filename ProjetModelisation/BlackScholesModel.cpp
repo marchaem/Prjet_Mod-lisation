@@ -128,4 +128,9 @@ int BlackScholesModel::getPasTemps(double t, double timestep, int nbTimeStep) {
     return indiceCour - 1;
 }
 
+PnlMat* BlackScholesModel::simul_market() {
+    
+}
+
+
 
