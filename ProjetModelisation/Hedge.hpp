@@ -17,18 +17,22 @@
 
 class Hedge {
 public:    
-    Hedge(Param * P, char *  file);    
+    Hedge(Param * P, char *  file);   // données  simulés par nos évaluateurs 
+    Hedge(Param* P); // données simulé par nous
     Hedge(const Hedge& orig);
-    virtual ~Hedge();   
+    ~Hedge();   
     PnlMat* getdelta();
     void setDelta(PnlMat* delta);
     void Maj(double t, const PnlMat* past);
+    void MajZero();
     int getIndice(double t);
     void Majall();
     PnlMat * getHisto(double t);
     double getPandL();
-    PnlMat * GetTrajectoire();
     PnlMat * getPast();
+    MonteCarlo * getMt();
+    int Getnbtreb();
+    PnlMat * GetGethisto();
 private:
     MonteCarlo * mt_;
     PnlMat* delta;
@@ -36,6 +40,7 @@ private:
     double profit_and_lost;
     int NbtreRebalencement;
     PnlMat * gethisto;
+    
 };
 
 #endif	/* HEDGE_HPP */

@@ -31,17 +31,17 @@ AsianOption::AsianOption(const AsianOption& orig): Option(orig), Strike_(orig.St
 AsianOption::~AsianOption() {
 }
 double AsianOption::payoff(const PnlMat *path){
-    PnlMat * transp = pnl_mat_transpose(path);
+    
     double payoff =0.0;
     double tmp=0.0;
     for (int d =0; d<this->getsize();d++){
         tmp=0.0;
         for (int i =0; i<this->getnbTimeSteps()+1;i++){          
-            tmp+=MGET(transp,i,d);
+            tmp+=MGET(path,d,i);
         }
         payoff+=this->getCoefficient(d)*tmp/(getnbTimeSteps()+1);   
     }
-    pnl_mat_free(&transp);
+    
     if (payoff > this->Strike_)
         return (payoff-this->Strike_);
     return 0.0;  

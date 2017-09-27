@@ -82,17 +82,12 @@ int main(int argc, char **argv)
     //PnlVect *delt=pnl_vect_create(size);
 
     char * file= "data/market-data/simul_asian.dat";
-    MonteCarlo *mt =new MonteCarlo(P);
-    PnlMat* path=pnl_mat_create(size,H+1);
-    mt->mod_->simul_market(path,T,H,mt->rng_);
-    pnl_mat_print(path);
+    
     //mt->price(prix,ic);
     //mt->delta(past,0.0,delt);
-    /*Hedge * portefeuille = new Hedge(P,file);
-    PnlMat * past = portefeuille->getPast();
-    int i =portefeuille->getIndice(1.5);
-    cout<< "dernier indice vaut : "<< i<<endl;
-
+    Hedge * portefeuille = new Hedge(P,file);
+    cout<<"je sors du constructeur "<<endl;
+    //pnl_mat_print(portefeuille->getPast());
     portefeuille->Majall();
   
     
@@ -101,7 +96,7 @@ int main(int argc, char **argv)
     //portefeuille->Majall();
     //cout << "on sort de Majall"<<endl;
     double pl = portefeuille->getPandL();
-    cout<< "l'error de tracking est de : "<< pl<< endl;*/
+    cout<< "l'error de tracking est de : "<< pl<< endl;
      
     
 }

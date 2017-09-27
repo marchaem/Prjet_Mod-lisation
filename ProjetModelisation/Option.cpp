@@ -1,3 +1,4 @@
+using namespace std;
 #pragma once
 
 #include "pnl/pnl_vector.h"
@@ -15,9 +16,10 @@ Option::Option(double T, int nbTimeSteps, int size): Maturity_(T),nbTimeSteps_(n
     
 Option::Option(double T, int nbTimeSteps, int size,std::vector <double> coefficient): coefficient_(coefficient){
     Maturity_=T;
-    
     nbTimeSteps_= nbTimeSteps;
     size_=size;
+    
+    
     
     
 }
@@ -32,7 +34,15 @@ Option::Option(Param *P){
     std::vector<double> second (size_,coefficient_[0]);
     this->coefficient_=second;
     P->extract("timestep number", this->nbTimeSteps_);
-    
+    if (Maturity_==0){
+        throw string ("Attention la maturité est nulle");
+    }
+    if (size_==0){
+        throw string(" Attention il n y a pas de sous-jacents");
+    }
+    if ( size_*coefficient_[0] !=1 ){
+        throw string ("Attention les coefficents sont mal répartis entre les actions");
+    }
 }
 Option::~Option(){
     coefficient_.~vector();
