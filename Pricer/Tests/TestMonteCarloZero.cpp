@@ -22,7 +22,7 @@ using namespace std;
  * 
  */
 
-/*
+
 int main(int argc, char** argv) {
     
     double T, r, strike;
@@ -68,5 +68,5 @@ int main(int argc, char** argv) {
     
     return 0;
 }
- * */
+ 
 
