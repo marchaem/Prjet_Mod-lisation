@@ -80,6 +80,7 @@ int main(int argc, char **argv)
     exit(0);*/
     //PnlMat * past=pnl_mat_create(size,timestep);
     //PnlVect *delt=pnl_vect_create(size);
+
     char * file= "data/market-data/simul_asian.dat";
     MonteCarlo *mt =new MonteCarlo(P);
     PnlMat* path=pnl_mat_create(size,H+1);
@@ -91,8 +92,14 @@ int main(int argc, char **argv)
     PnlMat * past = portefeuille->getPast();
     int i =portefeuille->getIndice(1.5);
     cout<< "dernier indice vaut : "<< i<<endl;
+
     portefeuille->Majall();
-    cout << "on sort de Majall"<<endl;
+  
+    
+ 
+    
+    //portefeuille->Majall();
+    //cout << "on sort de Majall"<<endl;
     double pl = portefeuille->getPandL();
     cout<< "l'error de tracking est de : "<< pl<< endl;*/
      

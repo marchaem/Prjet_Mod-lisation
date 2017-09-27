@@ -35,6 +35,7 @@ private:
     PnlMat* past;
     double profit_and_lost;
     int NbtreRebalencement;
+    PnlMat * gethisto;
 };
 
 #endif	/* HEDGE_HPP */
