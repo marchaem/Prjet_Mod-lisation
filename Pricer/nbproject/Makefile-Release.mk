@@ -47,6 +47,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Tests/TestBlackScholes2.o \
 	${OBJECTDIR}/Tests/TestMonteCarloZero.o \
 	${OBJECTDIR}/Tests/TestMonteCarloZero2.o \
+	${OBJECTDIR}/Tests/test_parser.o \
 	${OBJECTDIR}/mc_example.o \
 	${OBJECTDIR}/parser.o \
 	${OBJECTDIR}/testBasket.o \
@@ -136,6 +137,11 @@ ${OBJECTDIR}/Tests/TestMonteCarloZero2.o: Tests/TestMonteCarloZero2.cpp
 	${MKDIR} -p ${OBJECTDIR}/Tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Tests/TestMonteCarloZero2.o Tests/TestMonteCarloZero2.cpp
+
+${OBJECTDIR}/Tests/test_parser.o: Tests/test_parser.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Tests/test_parser.o Tests/test_parser.cpp
 
 ${OBJECTDIR}/mc_example.o: mc_example.cpp 
 	${MKDIR} -p ${OBJECTDIR}

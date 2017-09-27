@@ -38,16 +38,18 @@ endif()
 set(LIBS ${LIBS} m)
 
 # Testing the parser
-add_executable(parser-test src/parser.cpp Tests/test_parser.cpp)
-target_link_libraries(parser-test ${LIBS})
-add_executable(mc-example Tests/mc_example.cpp)
-target_link_libraries(mc-example ${LIBS})
+#add_executable(parser-test src/parser.cpp Tests/test_parser.cpp)
+#target_link_libraries(parser-test ${LIBS})
 
+
+#add_executable(mc-example Tests/mc_example.cpp)
+#target_link_libraries(mc-example ${LIBS})
+ 
 # add_executable(mc-pricer src/parser.cpp src/pricer.cpp)
 # target_link_libraries(mc-pricer ${LIBS})
 # install(TARGETS mc-pricer DESTINATION bin)
 
-add_subdirectory(src)
+#add_subdirectory(src)
 
 
 #Configuration de l'exécutable
@@ -57,21 +59,26 @@ file(
         GLOB_RECURSE
 
         source_files
-
-        test_parser.cpp
-        #src/*
+      
+        src/*
 
 )
 
 add_executable(
 
         pricer
-
+        
+        #Tests/test_parser.cpp
         ${source_files}
 
 )
+#target_link_libraries(pricer Cpp)
 target_link_libraries(pricer ${LIBS})
-target_link_libraries(pricer Cpp)
+#install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/pricer}
+ #   DESTINATION bin
+  #  RENAME ${CMAKE_PROJECT_NAME}-pricer)
+
+#set(CMAKE_CXX_FLAGS "-c")
 
 # Print compiler flags
 get_directory_property(DirDefs COMPILE_DEFINITIONS)
