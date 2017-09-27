@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     exit(0);*/
     //PnlMat * past=pnl_mat_create(size,timestep);
     //PnlVect *delt=pnl_vect_create(size);
-    char * file= "data/market-data/simul_asian.dat";
+    char * file= "data/market-data/simul_basket.dat";
    /* MonteCarlo *mt =new MonteCarlo(P);
     mt->price(prix,ic);
     mt->delta(past,0.0,delt);*/

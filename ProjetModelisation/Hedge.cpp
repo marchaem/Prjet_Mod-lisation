@@ -39,7 +39,7 @@ void Hedge::Maj(double t, const PnlMat* past_t){
     pnl_mat_get_row(Srt,this->past,getIndice(t));
     
     
-
+    
     this->mt_->delta(past_t,t,deltat);
     
  
@@ -78,8 +78,7 @@ void Hedge::Maj(double t, const PnlMat* past_t){
         pnl_vect_free(&deltat_moins_un);
         double ic;
         double prix;
-        cout<< "la fonction de dim est appelé avec t = "<<t <<"  et donc l'indice est "<< getIndice(t)<<endl;
-        cout<<" hors la taille de la matrice est : " << past_t->n<<endl;
+       
         
         this->mt_->price(past_t,t,prix,ic);
         cout<< "le prix en t  est : "<<prix<<endl;
@@ -106,8 +105,8 @@ void Hedge::Majall(){
         
         
         past_t=getHisto(t);
-        cout<<"sors de gethisto"<<endl;
-        pnl_mat_print(past_t);
+        
+        
         Maj(t,past_t);
   
         t+=pasDetps;              
@@ -127,9 +126,9 @@ void Hedge::Majall(){
     
     
     //this->profit_and_lost-= this->mt_->opt_->payoff(trajectoire);
-    
-    this->profit_and_lost-=this->mt_->opt_->payoff(this->gethisto);
-    cout<<" à la fin la taille qu'on met dans past pour le payoff  est de : "<< this->gethisto->n<<endl;
+    double payoff = this->mt_->opt_->payoff(this->gethisto);
+    this->profit_and_lost-=payoff;
+    cout<<" à la fin la taille qu'on met dans past pour le payoff  est de : "<< this->gethisto->n<<endl << "et il vaut "<<payoff<<endl;;
     pnl_mat_free(&past);
     pnl_vect_free(&Sfin);
     pnl_vect_free(&deltafin);
@@ -159,7 +158,7 @@ PnlMat * Hedge::getHisto(double t){
         return this->gethisto;
     }
     else{
-        cout<<"je passe par la "<<endl;
+        
         PnlMat * past_t = pnl_mat_copy(this->gethisto);
         
         PnlVect * vect = pnl_vect_create(size);
