@@ -12,6 +12,7 @@ public:
     int size_; /// nombre d'actifs du modèle
     double r_; /// taux d'intérêt
     double rho_; /// paramètre de corrélation
+    double trend_; /// tendance du marché
     PnlVect *sigma_; /// vecteur de volatilités
     PnlVect *spot_; /// valeurs initiales du sous-jacent
     
@@ -59,6 +60,8 @@ public:
      * @param[in] timestep pas de constatation du sous-jacent
      */
     void shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep);
+    
+    PnlMat * simul_market();
     
     int getPasTemps(double t, double timestep,int nbtimestep);
 
