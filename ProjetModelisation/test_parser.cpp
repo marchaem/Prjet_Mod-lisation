@@ -19,6 +19,7 @@ int main(int argc, char **argv)
     string type;
     int size;
     int timestep;
+    int H;
     size_t n_samples;
     double prix,ic;
     char *infile = argv[1];
@@ -53,7 +54,8 @@ int main(int argc, char **argv)
     cout << "Number of samples " << n_samples << endl; 
     P->extract("timestep number",timestep);
     cout<<"timestep "<<timestep<<endl;
-    
+    P->extract("hedging dates number",H);
+    cout<<"timestep "<<timestep<<endl;
     
    /* BlackScholesModel *testModel = new BlackScholesModel(P);
     double prix,mc;
@@ -79,17 +81,20 @@ int main(int argc, char **argv)
     //PnlMat * past=pnl_mat_create(size,timestep);
     //PnlVect *delt=pnl_vect_create(size);
     char * file= "data/market-data/simul_asian.dat";
-   /* MonteCarlo *mt =new MonteCarlo(P);
-    mt->price(prix,ic);
-    mt->delta(past,0.0,delt);*/
-    Hedge * portefeuille = new Hedge(P,file);
+    MonteCarlo *mt =new MonteCarlo(P);
+    PnlMat* path=pnl_mat_create(size,H+1);
+    mt->mod_->simul_market(path,T,H,mt->rng_);
+    pnl_mat_print(path);
+    //mt->price(prix,ic);
+    //mt->delta(past,0.0,delt);
+    /*Hedge * portefeuille = new Hedge(P,file);
     PnlMat * past = portefeuille->getPast();
     int i =portefeuille->getIndice(1.5);
     cout<< "dernier indice vaut : "<< i<<endl;
     portefeuille->Majall();
     cout << "on sort de Majall"<<endl;
     double pl = portefeuille->getPandL();
-    cout<< "l'error de tracking est de : "<< pl<< endl;
+    cout<< "l'error de tracking est de : "<< pl<< endl;*/
      
     
 }

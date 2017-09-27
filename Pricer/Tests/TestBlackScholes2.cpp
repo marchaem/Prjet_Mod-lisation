@@ -12,14 +12,14 @@
 #include "pnl/pnl_random.h"
 #include "pnl/pnl_vector.h"
 #include "pnl/pnl_matrix.h"
-#include <time.h>
+//#include <time.h>
 
 using namespace std;
 /*
  * 
  */
 
-int Test_Exeption_BlasScholes(int argc, char **argv)
+int main(int argc, char **argv)
 {
 
     int nbTimeSteps=1;

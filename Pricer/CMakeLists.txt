@@ -49,9 +49,8 @@ set(LIBS ${LIBS} m)
 # target_link_libraries(mc-pricer ${LIBS})
 # install(TARGETS mc-pricer DESTINATION bin)
 
-#add_subdirectory(src)
-
-
+add_subdirectory(src)
+add_subdirectory(Tests)
 #Configuration de l'exécutable
 
 file(
@@ -77,6 +76,9 @@ target_link_libraries(pricer ${LIBS})
 #install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/pricer}
  #   DESTINATION bin
   #  RENAME ${CMAKE_PROJECT_NAME}-pricer)
+#add_test(TestName ExeName)
+#add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND}
+ #                 DEPENDS ExeName)
 
 #set(CMAKE_CXX_FLAGS "-c")
 
