@@ -15,6 +15,7 @@ public:
     PnlVect *sigma_; /// vecteur de volatilités
     PnlVect *spot_; /// valeurs initiales du sous-jacent
     std::vector <double> trend_; /// valeurs de marché
+
     
     BlackScholesModel(Param *param);
 
@@ -61,7 +62,7 @@ public:
      */
     void shiftAsset(PnlMat *shift_path, const PnlMat *path, int d, double h, double t, double timestep);
     
-    PnlMat * simul_market();
+    PnlMat * simul_market(PnlMat* path, double T, int nbDateRebalancement, PnlRng* rng);
     
     int getPasTemps(double t, double timestep,int nbtimestep);
 

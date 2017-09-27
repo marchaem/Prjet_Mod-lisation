@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <time.h>
 #include "../src/parser.hpp"
 #include "../src/BlackScholesModel.hpp"
 #include "../src/MonteCarlo.hpp"
@@ -8,16 +9,37 @@
 #include "../src/Hedge.hpp"
 
 using namespace std;
+int parametreSelection(int argc,char **argv){
+    int i = 1;
+    if (argc>2){
+        if (argc>4){
+            cout << "trop d argument "<< endl;
+        }
+        if (strcmp(argv[1],"-c")==0){
+            i = 3;
+        }else if (strcmp(argv[2],"-c")==0){
+            cout << "mauvais ordre des paramètres mais problème résolut "<< endl;
+        }else {
+            cout << "option non reconu"<< endl;
+        }
+    }
+    return i ;
+}
 
 int main(int argc, char **argv)
-{
+{   
+    int i =parametreSelection(argc,argv);
+    // plus haut la selection de quel partie de programe executé
+   
+    const clock_t begin_time = clock();
+  
     double T, r, strike;
     PnlVect *spot, *sigma, *divid;
     string type;
     int size;
     size_t n_samples;
 
-    char *infile = argv[1];
+    char *infile = argv[i];
     Param *P = new Parser(infile);
 
     P->extract("option type", type);
@@ -32,7 +54,31 @@ int main(int argc, char **argv)
     }
     P->extract("strike", strike);
     P->extract("sample number", n_samples);
-
+    
+    //BlackScholesModel *testModel = new BlackScholesModel(P);
+    MonteCarlo *mc =new MonteCarlo(P);
+    double prix;
+    double ic;
+    mc->price(prix,ic);
+    cout<<prix<<endl;
+    cout<<ic<<endl; 
+    PnlVect *delta;
+    mc->calcDelta0(delta);
+    cout<<delta<<endl; 
+    //fabrication de l option
+    /*
+    if (type=="asian"){
+        AsianOption op= new AsianOption(P);
+    }else if (type=="basket"){
+        BasketOption op= new BasketOption(P);
+    }else if (type=="performance"){
+        performanceOption op=new performanceOption(P);
+    }else{
+        cout << "type d option non reconu " << endl;
+    }
+    */
+    
+    /*
     P->print();
     cout << endl;
     cout << "option type " << type << endl;
@@ -49,7 +95,7 @@ int main(int argc, char **argv)
     cout << "Number of samples " << n_samples << endl;
     int timestep;
     P->extract("timestep number",timestep);
-    
+    */
     
     /*BlackScholesModel *testModel = new BlackScholesModel(P);
     double prix,mc;
@@ -85,4 +131,7 @@ int main(int argc, char **argv)
     cout<< "l'error de tracking est de : "<< pl<< endl;
      */
     
+    
+    std::cout << float( clock () - begin_time ) << std::endl;
+ 
 }

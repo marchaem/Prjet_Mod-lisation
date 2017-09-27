@@ -76,13 +76,16 @@ int main(int argc, char **argv)
     delete P;
 
     exit(0);*/
-    PnlMat * past=pnl_mat_create(size,timestep);
-    PnlVect *delt=pnl_vect_create(size);
-    char * file= "data/market-data/simul_basket.dat";
+    //PnlMat * past=pnl_mat_create(size,timestep);
+    //PnlVect *delt=pnl_vect_create(size);
+    char * file= "data/market-data/simul_asian.dat";
    /* MonteCarlo *mt =new MonteCarlo(P);
     mt->price(prix,ic);
     mt->delta(past,0.0,delt);*/
     Hedge * portefeuille = new Hedge(P,file);
+    PnlMat * past = portefeuille->getPast();
+    int i =portefeuille->getIndice(1.5);
+    cout<< "dernier indice vaut : "<< i<<endl;
     portefeuille->Majall();
     cout << "on sort de Majall"<<endl;
     double pl = portefeuille->getPandL();
