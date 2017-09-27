@@ -57,9 +57,8 @@ void MonteCarlo::price(double &prix, double &ic) {
     ic = 1.96 * 2 * sqrt(EmCarre) / sqrt(this->nbSamples_);
     pnl_mat_free(&mat);
 
-    /*Pour test uniquement*/
-    std::cout << "Variance = " << EmCarre << std::endl;
-    std::cout << "Ecart Type = " << ecartype << std::endl;
+    
+    
 }
 
 void MonteCarlo::price(const PnlMat* past, double t, double& prix, double& ic) {
@@ -68,12 +67,12 @@ void MonteCarlo::price(const PnlMat* past, double t, double& prix, double& ic) {
     /*On veut vérifier si t est entre ti et ti+1*/
     double pas = this->opt_->getMaturity() / this->opt_->getnbTimeSteps();
     double dateAvantSt = 0.0;
-    dateAvantSt += (past->n - 1) * pas;
-    if (t > (dateAvantSt + pas) || t < dateAvantSt) {
+    dateAvantSt += (past->n - 2) * pas;
+    /*if (t > (dateAvantSt + pas) || t < dateAvantSt) {
         std::cout << "Past et t sont incohérents ! Arret ..." << std::endl;
         std::cout << "t devrait etre dans [" << dateAvantSt << "," << dateAvantSt + pas << "]"<< std::endl;
-        return;
-    }
+        throw string (" wesh ");
+    }*/
 
     double payoffCour = 0.0;
     double PrixCumul = 0.0;
@@ -185,12 +184,13 @@ void MonteCarlo::CalcDelta_t(const PnlMat* past, double t, PnlVect* delta) {
     /*On veut vérifier si t est entre ti et ti+1*/
     double pas = this->opt_->getMaturity() / this->opt_->getnbTimeSteps();
     double dateAvantSt = 0.0;
-    dateAvantSt += (past->n - 1) * pas;
-    if (t > (dateAvantSt + pas) || t < dateAvantSt) {
+    dateAvantSt += (past->n - 2) * pas;
+    
+    /*if (t > (dateAvantSt + pas) || t < dateAvantSt) {
         std::cout << "Past et t sont incohérents ! Arret ..." << std::endl;
         std::cout << "t devrait etre dans [" << dateAvantSt << "," << dateAvantSt + pas << "]"<< std::endl;
-        return;
-    }
+        throw string (" wesh ");
+    }*/
 
     PnlMat * path = pnl_mat_create(this->opt_->getsize(), this->opt_->getnbTimeSteps() + 1);
     PnlMat * shiftplus = pnl_mat_create(this->opt_->getsize(), this->opt_->getnbTimeSteps() + 1);
@@ -204,8 +204,8 @@ void MonteCarlo::CalcDelta_t(const PnlMat* past, double t, PnlVect* delta) {
     for (int i = 0; i< this->opt_->getsize(); i++) {
         for (int j = 0; j<this->nbSamples_; j++) {
             this->mod_->asset(path, t, this->opt_->getMaturity(), this->opt_->getnbTimeSteps(), this->rng_, past);
-            this->mod_->shiftAsset(shiftplus, path, i, this->fdStep_, 0.0, timestep);
-            this->mod_->shiftAsset(shiftmoins, path, i, -this->fdStep_, 0.0, timestep);
+            this->mod_->shiftAsset(shiftplus, path, i, this->fdStep_, t, timestep);
+            this->mod_->shiftAsset(shiftmoins, path, i, -this->fdStep_, t, timestep);
             payoffmoins = this->opt_->payoff(shiftmoins);
             payoffplus = this->opt_->payoff(shiftplus);
             tmp += payoffplus - payoffmoins;
