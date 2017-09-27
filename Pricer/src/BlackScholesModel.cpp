@@ -9,9 +9,12 @@ BlackScholesModel::BlackScholesModel(Param *param) {
     param->extract("interest rate", this->r_);
     param->extract("option size", this->size_);
     param->extract("correlation", this->rho_);
-    param->extract("volatility", this->sigma_, this->size_);
-    param->extract("spot", this->spot_, this->size_);
+    param->extract("volatility",this->sigma_,this->size_);
+    param->extract("spot",this->spot_,this->size_);
+    param->extract("trend",this->trend_,this->size_);
 }
+
+
 
 void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* rng) {
 
@@ -81,12 +84,12 @@ void BlackScholesModel::asset(PnlMat* path, double t, double T, int nbTimeSteps,
         sigmad = pnl_vect_get(this->sigma_, d);
         pnl_mat_get_row(Ld, cov, d);
         for (int j = 0; j <= nbTimeSteps; j++) {
-            pnl_vect_rng_normal(Gi, this->size_, rng);
+            pnl_mat_get_col(Gi, matGi, j - 1);
             if (j < (past->n) - 1) {
                 pnl_mat_set(path, d, j, pnl_mat_get(past, d, j));
             } else {
                 if (j == (past->n) - 1) {
-                    pas = (j+1) * T / nbTimeSteps - t;
+                    pas = (j + 1) * T / nbTimeSteps - t;
                 } else {
                     pas = T / nbTimeSteps;
                 }
@@ -128,9 +131,39 @@ int BlackScholesModel::getPasTemps(double t, double timestep, int nbTimeStep) {
     return indiceCour - 1;
 }
 
-PnlMat* BlackScholesModel::simul_market() {
-    
+PnlMat* BlackScholesModel::simul_market(PnlMat* path, double T, int nbDateRebalancement, PnlRng* rng) {
+    PnlMat* cov = pnl_mat_create_from_scalar(this->size_, this->size_, this->rho_);
+    for (int i = 0; i<this->size_; i++) {
+        pnl_mat_set_diag(cov, 1.0, i);
+    }
+    pnl_mat_chol(cov);
+
+    /*Calcul du pas*/
+    double pas = T / nbDateRebalancement;
+
+    /*Generation des vecteurs gaussiens*/
+    PnlMat* matGi = pnl_mat_create(this->size_, nbDateRebalancement);
+    pnl_mat_rng_normal(matGi, this->size_, nbDateRebalancement, rng);
+    PnlVect *Gi = pnl_vect_create(this->size_);
+
+    /*Simulation de la trajectoire*/
+    double S0;
+    double St;
+    double sigmad;
+    PnlVect* Ld = pnl_vect_create(this->size_);
+    for (int d = 0; d<this->size_; d++) {
+        S0 = pnl_vect_get(this->spot_, d);
+        pnl_mat_set(path, d, 0, S0);
+        sigmad = pnl_vect_get(this->sigma_, d);
+        pnl_mat_get_row(Ld, cov, d);
+        cout<<"on est la"<<endl;
+        for (int i = 1; i <= nbDateRebalancement; i++) {
+            pnl_mat_get_col(Gi, matGi, i - 1);
+            St = S0 * exp((this->trend_[d] - pow(sigmad, 2) / 2) * pas + sigmad * sqrt(pas) * pnl_vect_scalar_prod(Ld, Gi));
+            cout<<"on est ici"<<endl;
+            S0 = St;
+            pnl_mat_set(path, d, i, St);
+            cout<<"the end"<<endl;
+        }
+    }
 }
-
-
-
