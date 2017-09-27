@@ -83,11 +83,14 @@ int main(int argc, char **argv)
     mt->price(prix,ic);
     mt->delta(past,0.0,delt);*/
     Hedge * portefeuille = new Hedge(P,file);
-    PnlMat * past = portefeuille->getPast();
-    int i =portefeuille->getIndice(1.5);
-    cout<< "dernier indice vaut : "<< i<<endl;
+    
     portefeuille->Majall();
-    cout << "on sort de Majall"<<endl;
+  
+    
+ 
+    
+    //portefeuille->Majall();
+    //cout << "on sort de Majall"<<endl;
     double pl = portefeuille->getPandL();
     cout<< "l'error de tracking est de : "<< pl<< endl;
      
