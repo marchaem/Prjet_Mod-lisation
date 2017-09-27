@@ -14,7 +14,7 @@ public:
     double rho_; /// paramètre de corrélation
     PnlVect *sigma_; /// vecteur de volatilités
     PnlVect *spot_; /// valeurs initiales du sous-jacent
-    PnlVect *trend_; /// valeurs de marché
+    std::vector <double> trend_; /// valeurs de marché
     
     BlackScholesModel(Param *param);
 

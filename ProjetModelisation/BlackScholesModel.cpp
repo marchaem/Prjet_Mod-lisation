@@ -11,6 +11,7 @@ BlackScholesModel::BlackScholesModel(Param *param) {
     param->extract("correlation", this->rho_);
     param->extract("volatility",this->sigma_,this->size_);
     param->extract("spot",this->spot_,this->size_);
+    param->extract("trend",this->trend_,this->size_);
 }
 
 
