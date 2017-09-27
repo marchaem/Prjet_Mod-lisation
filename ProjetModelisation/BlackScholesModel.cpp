@@ -12,23 +12,26 @@ BlackScholesModel::BlackScholesModel(Param *param) {
     param->extract("volatility",this->sigma_,this->size_);
     param->extract("spot",this->spot_,this->size_);
     param->extract("trend",this->trend_,this->size_);
-    this->cov=pnl_mat_create_from_scalar(this->size_, this->size_, this->rho_);
+    this->cov_=pnl_mat_create_from_scalar(this->size_, this->size_, this->rho_);
     for (int i = 0; i<this->size_; i++) {
-        pnl_mat_set_diag(this->cov, 1.0, i);
+        pnl_mat_set_diag(this->cov_, 1.0, i);
     }
-    pnl_mat_chol(cov);
+    if(this->size_ < 0)
+        throw string("nombre négatif pour size impossible");
+    pnl_mat_chol(cov_);
+}
+
+BlackScholesModel::~BlackScholesModel() {
+    pnl_vect_free(&sigma_);
+    pnl_vect_free(&spot_);
+    pnl_mat_free(&cov_);
 }
 
 
 
-void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* rng) {
 
-    /*Generation matrice de covariance + cholesky*/
-    
-   
-    
-
-    /*Calcul du pas*/
+void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* rng) {   
+        /*Calcul du pas*/
     double pas = T / nbTimeSteps;
 
     /*Generation des vecteurs gaussiens*/
@@ -45,7 +48,7 @@ void BlackScholesModel::asset(PnlMat* path, double T, int nbTimeSteps, PnlRng* r
         S0 = pnl_vect_get(this->spot_, d);
         pnl_mat_set(path, d, 0, S0);
         sigmad = pnl_vect_get(this->sigma_, d);
-        pnl_mat_get_row(Ld, cov, d);
+        pnl_mat_get_row(Ld, cov_, d);
         for (int i = 1; i <= nbTimeSteps; i++) {
             pnl_mat_get_col(Gi, matGi, i - 1);
             St = S0 * exp((this->r_ - pow(sigmad, 2) / 2) * pas + sigmad * sqrt(pas) * pnl_vect_scalar_prod(Ld, Gi));
@@ -79,7 +82,7 @@ void BlackScholesModel::asset(PnlMat* path, double t, double T, int nbTimeSteps,
     for (int d = 0; d<this->size_; d++) {
         St = pnl_mat_get(past, d, (past->n) - 1);
         sigmad = pnl_vect_get(this->sigma_, d);
-        pnl_mat_get_row(Ld, cov, d);
+        pnl_mat_get_row(Ld, cov_, d);
         for (int j = 0; j <= nbTimeSteps; j++) {
             pnl_mat_get_col(Gi, matGi, j - 1);
             if (j < (past->n) - 1) {
@@ -162,9 +165,12 @@ void BlackScholesModel::simul_market(PnlMat* path, double T, int nbDateRebalance
             S0 = St;
             pnl_mat_set(path, d, i, St);
             
-        }
-       
+        }       
     }
+    pnl_mat_free(&cov);
+    pnl_mat_free(&matGi);
+    pnl_vect_free(&Ld);
+    pnl_vect_free(&Gi);
 }
 
 

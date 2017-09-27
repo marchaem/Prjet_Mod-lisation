@@ -27,9 +27,12 @@ MonteCarlo::MonteCarlo(Param *P) {
    
     P->extract("maturity", maturity);
     P->extract("fd step",this->fdStep_);
+    if(this->fdStep_<0)
+        throw string("fdStep est négative, recommencez");
 }
 MonteCarlo::~MonteCarlo(){
-    // faut voir comment liberer le rng
+    pnl_rng_free(&rng_);
+    delete mod_;
     
 }
 MonteCarlo::MonteCarlo(BlackScholesModel* black, Option* opt, double fdStep, int nbSamples) {
@@ -52,31 +55,21 @@ void MonteCarlo::price(double &prix, double &ic) {
         this->mod_->asset(mat, this->opt_->getMaturity(), this->opt_->getnbTimeSteps(), this->rng_);
         payoffCour = this->opt_->payoff(mat);
         PrixCumul += payoffCour;
-        // sommeCarres += pow(payoffCour, 2);
+        sommeCarres += pow(payoffCour, 2);
     }
     prix = PrixCumul / this->nbSamples_ * exp(-this->mod_->r_ * this->opt_->getMaturity());
 
-    /*EmCarre = (sommeCarres / this->nbSamples_ - pow((PrixCumul / this->nbSamples_), 2)) * exp(-2 * this->mod_->r_ * this->opt_->getMaturity());
+    EmCarre = (sommeCarres / this->nbSamples_ - pow((PrixCumul / this->nbSamples_), 2)) * exp(-2 * this->mod_->r_ * this->opt_->getMaturity());
     ecartype = sqrt(EmCarre) / sqrt(this->nbSamples_);
-    ic = 1.96 * 2 * sqrt(EmCarre) / sqrt(this->nbSamples_);*/
+    ic = 1.96 * 2 * sqrt(EmCarre) / sqrt(this->nbSamples_);
     pnl_mat_free(&mat);
 
-    
     
 }
 
 void MonteCarlo::price(const PnlMat* past, double t, double& prix, double& ic) {
 
-    /*Tout d'abord testons si t et past sont cohérents*/
-    /*On veut vérifier si t est entre ti et ti+1*/
-    //double pas = this->opt_->getMaturity() / this->opt_->getnbTimeSteps();
-    //double dateAvantSt = 0.0;
-    //dateAvantSt += (past->n - 2) * pas;
-    /*if (t > (dateAvantSt + pas) || t < dateAvantSt) {
-        std::cout << "Past et t sont incohérents ! Arret ..." << std::endl;
-        std::cout << "t devrait etre dans [" << dateAvantSt << "," << dateAvantSt + pas << "]"<< std::endl;
-        throw string (" wesh ");
-    }*/
+    
 
     double payoffCour = 0.0;
     double PrixCumul = 0.0;
@@ -88,18 +81,20 @@ void MonteCarlo::price(const PnlMat* past, double t, double& prix, double& ic) {
         this->mod_->asset(mat, t, this->opt_->getMaturity(), this->opt_->getnbTimeSteps(), this->rng_, past);
         payoffCour = this->opt_->payoff(mat);
         PrixCumul += payoffCour;
-        //sommeCarres += pow(payoffCour, 2);
+        sommeCarres += pow(payoffCour, 2);
     }
     prix = PrixCumul / this->nbSamples_ * exp(-this->mod_->r_ * (this->opt_->getMaturity()-t));
-    /*
+    
     EmCarre = (sommeCarres / this->nbSamples_ - pow((PrixCumul / this->nbSamples_), 2)) * exp(-2 * this->mod_->r_ * this->opt_->getMaturity());
     ecartype = sqrt(EmCarre) / sqrt(this->nbSamples_);
-    ic = 1.96 * 2 * sqrt(EmCarre) / sqrt(this->nbSamples_);*/
+    ic = 1.96 * 2 * sqrt(EmCarre) / sqrt(this->nbSamples_);
     pnl_mat_free(&mat);
 
     /*Pour test uniquement*/
-    //std::cout << "Variance = " << EmCarre << std::endl;
-    //std::cout << "Ecart Type = " << ecartype << std::endl;
+    cout << "Variance = " << EmCarre << endl;
+    cout << "Ecart Type = " << ecartype << endl;
+    cout << "prix = "<<prix<<endl;
+            
 
 }
 
@@ -165,10 +160,8 @@ void MonteCarlo::CalcDelta_t(const PnlMat* past, double t, PnlVect* delta) {
     PnlMat * shiftplus = pnl_mat_create(this->opt_->getsize(), this->opt_->getnbTimeSteps() + 1);
     PnlMat * shiftmoins = pnl_mat_create(this->opt_->getsize(), this->opt_->getnbTimeSteps() + 1);
 
-    double timestep = (this->opt_->getMaturity()) / this->opt_->getnbTimeSteps();
-    
+    double timestep = (this->opt_->getMaturity()) / this->opt_->getnbTimeSteps();   
     double tmp = 0.0;
-
     for (int i = 0; i< this->opt_->getsize(); i++) {
         for (int j = 0; j<this->nbSamples_; j++) {
             this->mod_->asset(path, t, this->opt_->getMaturity(), this->opt_->getnbTimeSteps(), this->rng_, past);

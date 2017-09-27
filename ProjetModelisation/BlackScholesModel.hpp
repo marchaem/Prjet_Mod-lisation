@@ -15,10 +15,11 @@ public:
     PnlVect *sigma_; /// vecteur de volatilités
     PnlVect *spot_; /// valeurs initiales du sous-jacent
     std::vector <double> trend_; /// valeurs de marché
-    PnlMat * cov;
+    PnlMat * cov_;
 
     
     BlackScholesModel(Param *param);
+    ~BlackScholesModel();
 
     /**
      * Génère une trajectoire du modèle et la stocke dans path

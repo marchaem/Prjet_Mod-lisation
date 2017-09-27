@@ -19,7 +19,6 @@ class Hedge {
 public:    
     Hedge(Param * P, char *  file);   // données  simulés par nos évaluateurs 
     Hedge(Param* P); // données simulé par nous
-    Hedge(const Hedge& orig);
     ~Hedge();   
     PnlMat* getdelta();
     void setDelta(PnlMat* delta);

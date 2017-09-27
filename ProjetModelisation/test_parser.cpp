@@ -57,44 +57,22 @@ int main(int argc, char **argv)
     P->extract("hedging dates number",H);
     cout<<"timestep "<<timestep<<endl;
     
-   /* BlackScholesModel *testModel = new BlackScholesModel(P);
-    double prix,mc;
-    MonteCarlo *mt =new MonteCarlo(P);
-
-    PnlRng * rng=pnl_rng_create(0);
-    pnl_rng_sseed(rng,time(NULL));
-    PnlVect * delta=pnl_vect_create(size);
-    PnlMat * past=pnl_mat_create_from_file("data/market-data/manu.dat");
-    past=pnl_mat_transpose(past);
-    PnlMat * path=pnl_mat_create(size,timestep+1);
-   // mt2->price(prix,mc);
-    mt->price(past,0.0,prix,mc);
-    cout <<"fini"<<endl;
+   
     
     
-    pnl_vect_free(&spot);
-    pnl_vect_free(&sigma);
-    pnl_vect_free(&divid);
-    delete P;
+ 
 
-    exit(0);*/
-    //PnlMat * past=pnl_mat_create(size,timestep);
-    //PnlVect *delt=pnl_vect_create(size);
 
-    char * file= "data/market-data/simul_asian.dat";
+
+    char * file= "data/market-data/simul_perf.dat";
     
     //mt->price(prix,ic);
     //mt->delta(past,0.0,delt);
     Hedge * portefeuille = new Hedge(P,file);
-    cout<<"je sors du constructeur "<<endl;
-    //pnl_mat_print(portefeuille->getPast());
+    
     portefeuille->Majall();
   
     
- 
-    
-    //portefeuille->Majall();
-    //cout << "on sort de Majall"<<endl;
     double pl = portefeuille->getPandL();
     cout<< "l'error de tracking est de : "<< pl<< endl;
      

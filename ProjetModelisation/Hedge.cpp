@@ -33,8 +33,7 @@ Hedge::Hedge(Param* P){
     this->delta= pnl_mat_create(this->mt_->opt_->getsize(),nbtrebalencement+1);
     PnlMat * path =  pnl_mat_create(this->mt_->opt_->getsize(),nbtrebalencement+1);
     this->mt_->mod_->simul_market(path,this->mt_->opt_->getMaturity(),nbtrebalencement,this->mt_->rng_);
-    this->past=pnl_mat_transpose(path);
-    
+    this->past=pnl_mat_transpose(path);    
     this->profit_and_lost=0.0;
     this->NbtreRebalencement=nbtrebalencement;
     PnlMat * past_t=pnl_mat_create(this->mt_->opt_->getsize(),1);
@@ -46,6 +45,8 @@ Hedge::Hedge(Param* P){
     
     
 }
+
+
 
 PnlMat * Hedge::getPast(){
     return this->past;
@@ -69,19 +70,11 @@ void Hedge::MajZero() {
     this->mt_->price(prix,ic);
     pnl_mat_set_col(this->delta,deltat,0);
     this->profit_and_lost=prix;
-    this->profit_and_lost-=pnl_vect_scalar_prod(Srt,deltat);
-        
-    cout<< "le prix en t =0 est : "<<prix<<endl;
-        
-    cout<< " au temps t=0 on met dans le sans risque : "<< this->profit_and_lost<<endl;
-    cout<< " au temps 0 le Srt vaut : "<<endl;
-    pnl_vect_print(Srt);
-    cout<<" et le delta t vaut : "<< endl;
-    pnl_vect_print(deltat);
-        
-    cout<<"  et donc au temps t=0 st * deltat : "<< pnl_vect_scalar_prod(Srt,deltat)<<endl;
+    this->profit_and_lost-=pnl_vect_scalar_prod(Srt,deltat);     
     cout<<" la tracking error en 0 "<< this->profit_and_lost + pnl_vect_scalar_prod(Srt,deltat) - prix <<endl;
-    
+    pnl_vect_free(&deltat);
+    pnl_vect_free(&Srt);
+
 }
 
 void Hedge::Maj(double t, const PnlMat* past_t){
@@ -99,21 +92,7 @@ void Hedge::Maj(double t, const PnlMat* past_t){
     pnl_vect_minus_vect(tmp,deltat_moins_un);
     this->profit_and_lost-=pnl_vect_scalar_prod(tmp,Srt);                
     pnl_vect_free(&tmp);
-    pnl_vect_free(&deltat_moins_un);
-        /*double ic;
-        double prix;
-       
-        
-        this->mt_->price(past_t,t,prix,ic);
-        cout<< "le prix en t  est : "<<prix<<endl;
-        cout<< " au temps t on met dans le sans risque : "<< this->profit_and_lost<<endl;
-        cout<< " au temps t le Srt vaut : "<<endl;
-        pnl_vect_print(Srt);
-        cout<<" et le delta t vaut : "<< endl;
-        pnl_vect_print(deltat);
-        cout<<"  et donc au temps t st * deltat : "<< pnl_vect_scalar_prod(Srt,deltat)<<endl;
-        cout<<"tracking error au temps  " <<t << " est :"<< this->profit_and_lost +pnl_vect_scalar_prod(Srt,deltat)-prix<<endl;*/
-    
+    pnl_vect_free(&deltat_moins_un);    
     pnl_vect_free(&Srt);
     pnl_vect_free(&deltat);
 }
@@ -140,7 +119,6 @@ void Hedge::Majall(){
     this->profit_and_lost+= pnl_vect_scalar_prod(deltafin,Sfin);
     double payoff = this->mt_->opt_->payoff(this->gethisto);
     this->profit_and_lost-=payoff;
-    // cout<<" à la fin la taille qu'on met dans past pour le payoff  est de : "<< this->gethisto->n<<endl << "et il vaut "<<payoff<<endl;;
     pnl_mat_free(&past_t);
     pnl_vect_free(&Sfin);
     pnl_vect_free(&deltafin);
@@ -155,14 +133,11 @@ PnlMat * Hedge::getHisto(double t){
     if (getIndice(t)%fraction==0){
         PnlVect * vect = pnl_vect_create(size);
         pnl_mat_get_row(vect,this->past,getIndice(t));
-        PnlMat* transp = pnl_mat_transpose(this->gethisto);
-      
-        pnl_mat_add_row(transp,transp->m,vect);
-        
+        PnlMat* transp = pnl_mat_transpose(this->gethisto);     
+        pnl_mat_add_row(transp,transp->m,vect);       
         this->gethisto= pnl_mat_transpose(transp);
         pnl_vect_free(&vect);
-        pnl_mat_free(&transp);
-       
+        pnl_mat_free(&transp);      
         return this->gethisto;
     }
     else{
@@ -184,8 +159,7 @@ PnlMat * Hedge::getHisto(double t){
 int Hedge::getIndice(double t){
     if(t==0)
         return 0;
-    double pasDeTps = this->mt_->opt_->getMaturity()/this->NbtreRebalencement;
-    
+    double pasDeTps = this->mt_->opt_->getMaturity()/this->NbtreRebalencement;   
     int indiceCour = 0;
     double dist = 0.0;
     while (dist <= t) {
@@ -197,15 +171,13 @@ int Hedge::getIndice(double t){
 }
 
 
-Hedge::Hedge(const Hedge& orig) {
-    // a faire ou à suprimer
-}
+
 
 Hedge::~Hedge() {
     pnl_mat_free(&delta);
     pnl_mat_free(&past);
     pnl_mat_free(&gethisto);
-    this->mt_->~MonteCarlo();
+    delete mt_;
     
     
 }
