@@ -16,6 +16,7 @@ public:
 
     MonteCarlo(Param *P);
     MonteCarlo(BlackScholesModel * black, Option * opt, double fdStep, int nbSamples);
+    ~MonteCarlo();
     /**
      * Calcule le prix de l'option à la date 0
      *

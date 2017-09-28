@@ -21,7 +21,7 @@ PerformanceOption::PerformanceOption(Param* P):Option(P){
 PerformanceOption::~PerformanceOption() {
 }
 double PerformanceOption::payoff(const PnlMat *path){ 
-    PnlMat * transp = pnl_mat_transpose(path);
+    
     double payoff =0.0;
     double tmp1=0.0;
     double tmp2=0.0;
@@ -30,15 +30,13 @@ double PerformanceOption::payoff(const PnlMat *path){
         tmp1=0.0;
         tmp2=0.0;
         for (int d =0; d<this->getsize();d++){          
-            tmp1+=this->getCoefficient(d)*MGET(transp,i,d);          
-            tmp2+=this->getCoefficient(d)*MGET(transp,(i-1),d);           
+            tmp1+=this->getCoefficient(d)*MGET(path,d,i);          
+            tmp2+=this->getCoefficient(d)*MGET(path,d,i-1);           
         }
         
         if( tmp1/tmp2 >1 )
         payoff+= (tmp1/tmp2-1);  
     } 
-    pnl_mat_free(&transp);
-
     return (1.0+payoff);
 }
 void PerformanceOption::toString(){

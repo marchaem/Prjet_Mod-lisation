@@ -1,3 +1,4 @@
+using namespace std;
 #pragma once
 
 #include "pnl/pnl_vector.h"
@@ -10,14 +11,19 @@ Option::Option(): Maturity_(1),nbTimeSteps_(1) , size_(1),coefficient_(1){
     
 }
 Option::Option(double T, int nbTimeSteps, int size): Maturity_(T),nbTimeSteps_(nbTimeSteps),size_(size),coefficient_(size){
-    
+   
+    if(T < 0.0 || nbTimeSteps_ < 0 || size < 0 )
+        throw string("un paramètre de l'option est négative ce qui a pas de sens, recommencez");
 }
     
 Option::Option(double T, int nbTimeSteps, int size,std::vector <double> coefficient): coefficient_(coefficient){
+    if(T < 0 || nbTimeSteps_ < 0 || size < 0 )
+        throw string("un paramètre de l'option est négative ce qui a pas de sens, recommencez");
     Maturity_=T;
-    
     nbTimeSteps_= nbTimeSteps;
     size_=size;
+    
+    
     
     
 }
@@ -32,10 +38,18 @@ Option::Option(Param *P){
     std::vector<double> second (size_,coefficient_[0]);
     this->coefficient_=second;
     P->extract("timestep number", this->nbTimeSteps_);
-    
+    if (Maturity_<=0){
+        throw string ("Attention la maturité est négative ou nulle");
+    }
+    if (size_==0){
+        throw string(" Attention il n y a pas de sous-jacents");
+    }
+    if ( size_*coefficient_[0] !=1 ){
+        throw string ("Attention les coefficents sont mal répartis entre les actions");
+    }
 }
 Option::~Option(){
-    coefficient_.~vector();
+    
 }
 double Option::getMaturity() {  
     return this->Maturity_;
