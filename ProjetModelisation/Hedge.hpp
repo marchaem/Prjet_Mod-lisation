@@ -19,7 +19,6 @@ class Hedge {
 public:    
     Hedge(Param * P, char *  file);   // données  simulés par nos évaluateurs 
     Hedge(Param* P); // données simulé par nous
-    Hedge(const Hedge& orig);
     ~Hedge();   
     PnlMat* getdelta();
     void setDelta(PnlMat* delta);
@@ -37,7 +36,7 @@ private:
     MonteCarlo * mt_;
     PnlMat* delta;
     PnlMat* past;
-    double profit_and_lost;
+    double profit_and_loss;
     int NbtreRebalencement;
     PnlMat * gethisto;
     

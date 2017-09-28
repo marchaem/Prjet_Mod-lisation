@@ -37,8 +37,8 @@ Option::Option(Param *P){
         pnl_vect_set(this->coefficient_,i,second[0]);
     }
     P->extract("timestep number", this->nbTimeSteps_);
-    if (Maturity_==0){
-        throw string ("Attention la maturité est nulle");
+    if (Maturity_<=0){
+        throw string ("Attention la maturité est négative ou nulle");
     }
     if (size_==0){
         throw string(" Attention il n y a pas de sous-jacents");

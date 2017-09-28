@@ -14,10 +14,10 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-    char *infile = "data/basket.dat";
+    char *infile = "data/asian.dat";
     Param *P = new Parser(infile);
 
-    char * file= "data/market-data/simul_basket.dat";
+    char * file= "data/market-data/simul_asian.dat";
     
     Hedge * portefeuille = new Hedge(P,file);
   

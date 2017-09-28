@@ -15,7 +15,7 @@ Hedge::Hedge(Param* P, char * fichier) {
     P->extract("hedging dates number", this->NbtreRebalencement);
     this->delta = pnl_mat_create(this->mt_->opt_->getsize(), this->NbtreRebalencement + 1);
     this->past = pnl_mat_create_from_file(fichier);
-    this->profit_and_lost = 0.0;
+    this->profit_and_loss = 0.0;
     PnlMat * past_t = pnl_mat_create(this->mt_->opt_->getsize(), 1);
     pnl_mat_set_col(past_t, this->mt_->mod_->spot_, 0);
     this->gethisto = past_t;
@@ -26,7 +26,7 @@ Hedge::Hedge(Param* P) {
     this->mt_ = new MonteCarlo(P);
     P->extract("hedging dates number", this->NbtreRebalencement);
     this->delta = pnl_mat_create(this->mt_->opt_->getsize(), this->NbtreRebalencement + 1);
-    this->profit_and_lost = 0.0;
+    this->profit_and_loss = 0.0;
     PnlMat * past_t = pnl_mat_create(this->mt_->opt_->getsize(), 1);
     pnl_mat_set_col(past_t, this->mt_->mod_->spot_, 0);
     this->gethisto = past_t;
@@ -63,8 +63,8 @@ void Hedge::MajZero() {
     pnl_mat_set_col(this->delta, delta0, 0);
 
     /*Calcul de V0*/
-    this->profit_and_lost = prix;
-    this->profit_and_lost -= pnl_vect_scalar_prod(this->mt_->mod_->spot_, delta0);
+    this->profit_and_loss = prix;
+    this->profit_and_loss -= pnl_vect_scalar_prod(this->mt_->mod_->spot_, delta0);
 
 }
 
@@ -80,9 +80,9 @@ void Hedge::Maj(double t, const PnlMat* past_t) {
     pnl_mat_set_col(this->delta, delta_t, j);
     
     /*Calcul du prix (pour test)*/
-    double prix, ic;
+    /*double prix, ic;
     this->mt_->price(past_t, t, prix, ic);
-    std::cout << "Prix au temps " << t << " = " << prix << std::endl;
+    std::cout << "Prix au temps " << t << " = " << prix << std::endl;*/
 
     /*On va chercher le delta précédent*/
     PnlVect * deltat_moins_un = pnl_vect_create(this->mt_->opt_->getsize());
@@ -93,8 +93,8 @@ void Hedge::Maj(double t, const PnlMat* past_t) {
     pnl_vect_minus_vect(diffDeltas, deltat_moins_un);
 
     /*Actualisation de Vi*/
-    this->profit_and_lost *= exp(this->mt_->mod_->r_ * this->mt_->opt_->getMaturity() / this->NbtreRebalencement);
-    this->profit_and_lost -= pnl_vect_scalar_prod(diffDeltas, St);
+    this->profit_and_loss *= exp(this->mt_->mod_->r_ * this->mt_->opt_->getMaturity() / this->NbtreRebalencement);
+    this->profit_and_loss -= pnl_vect_scalar_prod(diffDeltas, St);
 
     /*Libération de la mémoire*/
     pnl_vect_free(&diffDeltas);
@@ -125,8 +125,8 @@ void Hedge::Majall() {
 
     /*Calcul du P&L*/
     double payoff = this->mt_->opt_->payoff(this->gethisto);
-    this->profit_and_lost += pnl_vect_scalar_prod(deltafin, Sfin);
-    this->profit_and_lost -= payoff;
+    this->profit_and_loss += pnl_vect_scalar_prod(deltafin, Sfin);
+    this->profit_and_loss -= payoff;
 
     /*Libération de la mémoire*/
     pnl_mat_free(&past_t);
@@ -186,7 +186,7 @@ Hedge::~Hedge() {
     pnl_mat_free(&delta);
     pnl_mat_free(&past);
     pnl_mat_free(&gethisto);
-    this->mt_->~MonteCarlo();
+    delete mt_;
     
 }
 
@@ -199,5 +199,5 @@ void Hedge::setDelta(PnlMat* delta) {
 }
 
 double Hedge::getPandL() {
-    return this->profit_and_lost;
+    return this->profit_and_loss;
 }

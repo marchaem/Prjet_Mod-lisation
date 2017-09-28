@@ -80,7 +80,6 @@ void MonteCarlo::price(const PnlMat* past, double t, double& prix, double& ic) {
         PrixCumul += payoffCour;
         sommeCarres += pow(payoffCour, 2);
     }
-    PnlVect *test = pnl_vect_create(this->mod_->size_);
     prix = PrixCumul / this->nbSamples_ * exp(-this->mod_->r_ * (this->opt_->getMaturity()-t));
     EmCarre = (sommeCarres / this->nbSamples_ - pow((PrixCumul / this->nbSamples_), 2)) * exp(-2 * this->mod_->r_ * this->opt_->getMaturity());
     ecartype = sqrt(EmCarre) / sqrt(this->nbSamples_);
