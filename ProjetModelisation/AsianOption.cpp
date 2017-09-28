@@ -42,9 +42,8 @@ double AsianOption::payoff(const PnlMat *path){
         payoff+=this->getCoefficient(d)*tmp/(getnbTimeSteps()+1);   
     }
     
-    if (payoff > this->Strike_)
-        return (payoff-this->Strike_);
-    return 0.0;  
+    payoff = payoff - this->Strike_;
+    return std::max(payoff,0.0);
 }
 
 void AsianOption::toString(){

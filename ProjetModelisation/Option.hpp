@@ -36,7 +36,7 @@ public:
     void setsize(int size);
     double getCoefficient(int i);
     void setCoefficient(double d, int i);
-    
+    void print();
     
     
     
@@ -47,7 +47,7 @@ protected:
     double Maturity_; /// maturité
     int nbTimeSteps_; /// nombre de pas de temps de discrétisation
     int size_; /// dimension du modèle, redondant avec BlackScholesModel::size_
-    std::vector <double> coefficient_; // vecteur de coefficients
+    PnlVect * coefficient_; // vecteur de coefficients
 };
 
 

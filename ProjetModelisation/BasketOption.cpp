@@ -46,15 +46,21 @@ void BasketOption::setStrike(double strike) {
 
 double BasketOption::payoff(const PnlMat *path){
     
-    double payoff = 0.0;
+    PnlVect * lastCol = pnl_vect_create(this->size_);
+    pnl_mat_get_col(lastCol,path,path->n-1);
+    double payoff = pnl_vect_scalar_prod(this->coefficient_,lastCol) - this->Strike_;
+    pnl_vect_free(&lastCol);
+    
+    return std::max(payoff,0.0);
+
+    /*double payoff = 0.0;
     for (int i = 0 ; i< this->getsize() ; i++){
-       
-        payoff+=this->getCoefficient(i)* MGET(path,i,this->getnbTimeSteps());
+        payoff+=this->getCoefficient(i)* MGET(path,i,path->n-1);
     }
     payoff-=this->getStrike();
     if ( payoff> 0)
         return payoff;
-    return 0.0;
+    return 0.0;*/
     
 }
 void BasketOption::toString(){

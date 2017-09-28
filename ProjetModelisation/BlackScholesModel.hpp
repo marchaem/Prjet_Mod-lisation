@@ -65,7 +65,7 @@ public:
     
     void simul_market(PnlMat* path, double T, int nbDateRebalancement, PnlRng* rng);
     
-    int getPasTemps(double t, double timestep,int nbtimestep);
+    int getPasTemps(double t, double timestep, int nbtimestep);
 
 };
 
